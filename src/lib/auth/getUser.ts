@@ -1,24 +1,22 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import prisma from "../db/prisma";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
-interface Session {
-  user: string;
-  email: string;
-}
-
-export default async function getUser() {
+const getUser = async () => {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/");
+  const userMail = session?.user?.email;
+  if (!userMail) {
+    redirect("/api/auth/signin");
   }
-  const currentUserEmail = session?.user?.email!;
-  const user = await prisma.user.findUnique({
-    where: {
-      email: currentUserEmail,
-    },
-  });
-  console.log("getUser: ", user);
-  return user;
-}
+  if (userMail) {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: userMail,
+      },
+    });
+    return user;
+  }
+};
+
+export default getUser;

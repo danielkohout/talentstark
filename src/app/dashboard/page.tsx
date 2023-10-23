@@ -1,13 +1,9 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import Dashboard from "@/components/dashboard/Dashboard";
 import getUser from "@/lib/auth/getUser";
-import { redirect } from "next/navigation";
 
 const Page = async () => {
-  const session = getServerSession(authOptions);
   const user = await getUser();
-  if (!user || !user.id) redirect("/api/auth/signin");
-  return <div className="">{user?.email}</div>;
+  return <Dashboard />;
 };
 
 export default Page;

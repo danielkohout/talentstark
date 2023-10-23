@@ -4,7 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import AuthProvider from "@/lib/auth/AuthProvider";
-
+import Providers from "@/lib/Providers";
+import "react-loading-skeleton/dist/skeleton.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,15 +21,17 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="de" className="light">
-        <body
-          className={cn(
-            "min-h-screen font-sans antialiased grainy",
-            inter.className
-          )}
-        >
-          <Navbar />
-          {children}
-        </body>
+        <Providers>
+          <body
+            className={cn(
+              "min-h-screen font-sans antialiased",
+              inter.className
+            )}
+          >
+            <Navbar />
+            {children}
+          </body>
+        </Providers>
       </html>
     </AuthProvider>
   );
