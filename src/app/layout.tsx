@@ -8,6 +8,9 @@ import Providers from "@/lib/Providers";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/lib/theme-provider";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

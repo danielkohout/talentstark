@@ -7,7 +7,7 @@ import type { NextAuthOptions } from "next-auth";
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: "database",
+    strategy: "jwt",
   },
   providers: [
     Email({
