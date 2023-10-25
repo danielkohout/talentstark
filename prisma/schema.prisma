@@ -52,6 +52,9 @@ model Company {
   users     User[]
   teams     Team[]
   jobs      Job[]
+  street    String
+  city      String
+  postCode  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

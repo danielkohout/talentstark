@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import AuthProvider from "@/lib/auth/AuthProvider";
 import Providers from "@/lib/Providers";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default function RootLayout({
           >
             <Navbar />
             {children}
+            <Toaster />
           </body>
         </Providers>
       </html>
