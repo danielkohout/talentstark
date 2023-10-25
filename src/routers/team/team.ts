@@ -1,7 +1,6 @@
 import prisma from "@/lib/db/prisma";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
-import { revalidatePath } from "next/cache";
 
 export const teamRouter = router({
   getTeams: privateProcedure.query(async ({ ctx }) => {
@@ -29,6 +28,12 @@ export const teamRouter = router({
               id: user?.companyId!,
             },
           },
+        },
+      });
+      return await prisma.userTeam.create({
+        data: {
+          userId: user?.id!,
+          teamId: newTeam.id,
         },
       });
     }),

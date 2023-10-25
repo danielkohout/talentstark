@@ -1,8 +1,13 @@
 import Dashboard from "@/components/dashboard/Dashboard";
-import getUser from "@/lib/auth/getUser";
+import UserTeams from "@/components/dashboard/UserTeams";
 
 const Page = async () => {
-  return <Dashboard />;
+  return (
+    <>
+      <Dashboard />
+      <UserTeams />
+    </>
+  );
 };
 
 export default Page;

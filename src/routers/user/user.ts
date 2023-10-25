@@ -15,9 +15,18 @@ export const userRouter = router({
       where: {
         email: session?.user?.email,
       },
+      include: {
+        company: true,
+        teams: {
+          include: {
+            team: true,
+          },
+        },
+      },
     });
     return user;
   }),
+
   updateUser: privateProcedure
     .input(
       z.object({

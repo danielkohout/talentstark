@@ -17,6 +17,10 @@ export const jobRouter = router({
     // Finde alle Jobs der Firma
     const jobs = await prisma.job.findMany({
       where: { companyId: companyId },
+      include: {
+        Company: true,
+        Team: true,
+      },
     });
 
     return jobs; // Die gefundenen Jobs zurückgeben

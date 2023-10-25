@@ -2,13 +2,14 @@ import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { buttonVariants } from "./ui/button";
 import { DashboardButton, LoginButton } from "./ui/authButtons";
+import { ModeToggle } from "./DarkModeToggle";
 
 const Navbar = () => {
   return (
-    <nav className="sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
+    <nav className="sticky inset-x-0 top-0 z-30 h-14 w-full border-b bg-white/75 backdrop-blur-lg transition-all  dark:bg-gray-900/75">
       <MaxWidthWrapper>
-        <div className="flex h-14 items-center justify-between border-b- border-zinc-200">
-          <Link href="/" className="flex z-40 font-semibold">
+        <div className="border-b- flex h-14 items-center justify-between border-zinc-200">
+          <Link href="/" className="z-40 flex font-semibold">
             talentstark.
           </Link>
           {/* todo: mobile Navigation */}
@@ -25,6 +26,7 @@ const Navbar = () => {
               </Link>
               <DashboardButton />
               <LoginButton />
+              <ModeToggle />
             </>
           </div>
         </div>
