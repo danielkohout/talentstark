@@ -133,12 +133,14 @@ const Dashboard = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center py-10 text-center">
-            <Ghost className="h-10 w-10 text-gray-900" />
-            <h1 className="text-xl font-bold text-gray-900 md:text-2xl">
+          <div className="flex flex-col items-center rounded-lg border-2 border-dashed py-10 text-center">
+            <Ghost className="h-10 w-10" />
+            <h1 className="text-xl font-bold md:text-2xl">
               Hier sieht es noch ganz schön leer aus...
             </h1>
-            <p className="text-gray-600">Lege jetzt deinen ersten Job an.</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              Lege jetzt deinen ersten Job an.
+            </p>
             <Link
               href={"/"}
               className={buttonVariants({

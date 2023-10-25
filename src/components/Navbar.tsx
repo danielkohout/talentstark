@@ -1,12 +1,10 @@
 "use client";
-import Link from "next/link";
-import MaxWidthWrapper from "./MaxWidthWrapper";
-import { buttonVariants } from "./ui/button";
-import { DashboardButton, LoginButton } from "./ui/authButtons";
-import { ModeToggle } from "./DarkModeToggle";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { ModeToggle } from "./DarkModeToggle";
+import MaxWidthWrapper from "./MaxWidthWrapper";
 import UserToggle from "./UserToggle";
-import { redirect } from "next/navigation";
+import { buttonVariants } from "./ui/button";
 
 const Navbar = () => {
   const { status } = useSession();
@@ -19,10 +17,33 @@ const Navbar = () => {
             talentstark.
           </Link>
           {/* todo: mobile Navigation */}
-          <div className="hidden items-center space-x-4 sm:flex">
+          <div className="hidden items-center space-x-2 sm:flex">
             {status === "authenticated" ? (
               <>
-                <DashboardButton />
+                <Link
+                  className={buttonVariants({
+                    variant: "ghost",
+                  })}
+                  href={"/"}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  className={buttonVariants({
+                    variant: "ghost",
+                  })}
+                  href={"/"}
+                >
+                  Teams
+                </Link>
+                <Link
+                  className={buttonVariants({
+                    variant: "ghost",
+                  })}
+                  href={"/"}
+                >
+                  Jobs
+                </Link>
                 <UserToggle />
               </>
             ) : (

@@ -6,10 +6,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Moon, Sun, User } from "lucide-react";
+import { User } from "lucide-react";
 import { LoginButton } from "./ui/authButtons";
 import { Button } from "./ui/button";
+import { trpc } from "@/app/_trpc/client";
+import Link from "next/link";
 const UserToggle = () => {
+  const { data: user } = trpc.userRouter.getUser.useQuery();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -19,11 +22,23 @@ const UserToggle = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {user?.firstName} {user?.lastName}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={"/user/details"}>Account</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={"/user/details"}>Firma</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={"/user/details"}>Rechnungen</Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem>
+          <Link href={"/user/details"}>Support</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>
           <LoginButton />
         </DropdownMenuItem>
