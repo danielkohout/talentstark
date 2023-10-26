@@ -2,7 +2,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/lib/db/prisma";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 const t = initTRPC.create();
 const middleware = t.middleware;
