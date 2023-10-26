@@ -35,9 +35,7 @@ export default function RootLayout({
           >
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
+              defaultTheme="system"         
             >
               <Navbar />
               {children}
@@ -49,5 +47,5 @@ export default function RootLayout({
     </AuthProvider>
   );
 }
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// export const dynamic = "force-dynamic";
+// export const revalidate = 0;

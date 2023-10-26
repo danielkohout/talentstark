@@ -10,7 +10,7 @@ import { UserCog2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const EditDetails = () => {
+const EditUserDetails = () => {
   const utils = trpc.useUtils();
   const { data: user, isLoading } = trpc.userRouter.getUser.useQuery();
   const { toast } = useToast();
@@ -96,4 +96,4 @@ const EditDetails = () => {
   );
 };
 
-export default EditDetails;
+export default EditUserDetails;

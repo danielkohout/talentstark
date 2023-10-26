@@ -9,7 +9,7 @@ interface UpdateUser {
   updateUser: (formData: FormData) => void;
 }
 
-const AddDetails = ({ updateUser }: UpdateUser) => {
+const AddDetails = () => {
   const { data: user } = trpc.userRouter.getUser.useQuery();
 
   return (
@@ -27,7 +27,7 @@ const AddDetails = ({ updateUser }: UpdateUser) => {
           Wir benötigen noch ein deinen Namen von dir.
         </p>
       </div>
-      <form className="max-w-sm mx-auto mt-8 space-y-4" action={updateUser}>
+      <form className="max-w-sm mx-auto mt-8 space-y-4">
         <div>
           <Label htmlFor="firstName">Vorname</Label>
           <Input

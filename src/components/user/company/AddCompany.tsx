@@ -6,32 +6,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Store } from "lucide-react";
 
-interface AddCompanyProps {
-  addCompany: (formData: FormData) => void;
-}
-const AddCompany = ({ addCompany }: AddCompanyProps) => {
+interface AddCompanyProps {}
+const AddCompany = () => {
   const { data: user } = trpc.userRouter.getUser.useQuery();
 
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-10">
+    <div className="mx-auto mt-10 max-w-7xl px-6 lg:px-8">
       {/* Begrüßung zum Setup */}
-      <div className="flex flex-col justify-center items-center text-center">
-        <div className="shadow text-sm px-8 py-2 bg-white ring-1 ring-inset ring-gray-200 rounded-full text-gray-600">
+      <div className="flex flex-col items-center justify-center text-center">
+        <div className="rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200">
           Angemeldet mit: {user?.email}
         </div>
-        <Store className="w-10 h-10 text-gray-900 mt-8" />
-        <h1 className="text-2xl lg:text-3xl font-bold text-center">
+        <Store className="mt-8 h-10 w-10 text-gray-900" />
+        <h1 className="text-center text-2xl font-bold lg:text-3xl">
           Hallo {user?.firstName} <br /> willkommen bei talentstark.
         </h1>
-        <p className="text-gray-600 mt-2 max-w-xl mx-auto">
+        <p className="mx-auto mt-2 max-w-xl text-gray-600">
           Lege zuerst dein Unternehmen an. {user?.email} wird dann der Besitzer
           dieses Unternehmens sein.
         </p>
       </div>
-      <form
-        className="max-w-2xl mx-auto flex flex-col items-center mt-8 space-y-4"
-        action={addCompany}
-      >
+      <form className="mx-auto mt-8 flex max-w-2xl flex-col items-center space-y-4">
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="name">Name des Unternehmens</Label>
           <Input
@@ -52,7 +47,7 @@ const AddCompany = ({ addCompany }: AddCompanyProps) => {
             placeholder="Unter den Linden 13"
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-5 w-full max-w-sm gap-1">
+        <div className="grid w-full max-w-sm grid-cols-1 gap-1 md:grid-cols-5">
           <div className="md:col-span-3">
             <Label htmlFor="city">Ort</Label>
             <Input
