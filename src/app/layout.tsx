@@ -3,17 +3,13 @@ import { Toaster } from "@/components/ui/toaster";
 import Providers from "@/lib/Providers";
 import AuthProvider from "@/lib/auth/AuthProvider";
 import { ThemeProvider } from "@/lib/theme-provider";
-import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
+import { cn, constructMetaData } from "@/lib/utils";
 import { Inter } from "next/font/google";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "talentstark",
-  description: "Moderne HR & Recruiting Lösungen",
-};
+export const metadata = constructMetaData();
 
 export default function RootLayout({
   children,

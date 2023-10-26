@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 const getUser = async () => {
   const session = await getServerSession(authOptions);
   const userMail = session?.user?.email;
-  console.log("userMail", userMail);
   if (!userMail) {
     redirect("/api/auth/signin");
   }
