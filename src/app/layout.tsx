@@ -26,7 +26,7 @@ export default function RootLayout({
               inter.className
             )}
           >
-            <ThemeProvider attribute="class" defaultTheme="system">
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
               <Navbar />
               {children}
               <Toaster />

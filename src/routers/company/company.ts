@@ -4,7 +4,13 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db/prisma";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { TRPCError } from "@trpc/server";
 
+interface CityData {
+  postalCode: string;
+  name: string;
+  // Füge weitere Felder hinzu, die du benötigst
+}
 export const companyRouter = router({
   addCompany: privateProcedure
     .input(
