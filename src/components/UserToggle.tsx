@@ -27,17 +27,17 @@ const UserToggle = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href={"/user/details"}>Account</Link>
+          <Link href={"/user"}>Account</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href={"/user/details"}>Firma</Link>
+          <Link href={"/company"}>Firma</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href={"/user/details"}>Rechnungen</Link>
+          <Link href={"/"}>Rechnungen</Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem>
-          <Link href={"/user/details"}>Support</Link>
+          <Link href={"/"}>Support</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <LoginButton />

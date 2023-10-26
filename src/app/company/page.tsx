@@ -4,10 +4,10 @@ import getUser from "@/lib/auth/getUser";
 
 const page = async () => {
   const user = await getUser();
-  // if (!user?.companyId) {
+  if (!user?.companyId) {
     return <AddCompany />;
-  // }
-  // return <EditCompany />;
+  }
+  return <EditCompany />;
 };
 
 export default page;

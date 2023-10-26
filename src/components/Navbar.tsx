@@ -5,6 +5,7 @@ import { ModeToggle } from "./DarkModeToggle";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import UserToggle from "./UserToggle";
 import { buttonVariants } from "./ui/button";
+import { Loader2 } from "lucide-react";
 
 const Navbar = () => {
   const { status } = useSession();
@@ -32,7 +33,7 @@ const Navbar = () => {
                   className={buttonVariants({
                     variant: "ghost",
                   })}
-                  href={"/"}
+                  href={"/team"}
                 >
                   Teams
                 </Link>
@@ -40,7 +41,7 @@ const Navbar = () => {
                   className={buttonVariants({
                     variant: "ghost",
                   })}
-                  href={"/"}
+                  href={"/job"}
                 >
                   Jobs
                 </Link>
@@ -48,15 +49,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link
-                  href="/pricing"
-                  className={buttonVariants({
-                    variant: "ghost",
-                    size: "sm",
-                  })}
-                >
-                  Preise
-                </Link>
+                <Loader2 className="h-4 w-4 animate-spin" />
               </>
             )}
             <ModeToggle />

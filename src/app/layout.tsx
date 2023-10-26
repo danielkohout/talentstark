@@ -1,16 +1,13 @@
+import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/lib/Providers";
+import AuthProvider from "@/lib/auth/AuthProvider";
+import { ThemeProvider } from "@/lib/theme-provider";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import { cn } from "@/lib/utils";
-import Navbar from "@/components/Navbar";
-import AuthProvider from "@/lib/auth/AuthProvider";
-import Providers from "@/lib/Providers";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/lib/theme-provider";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
+import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -33,10 +30,7 @@ export default function RootLayout({
               inter.className
             )}
           >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"         
-            >
+            <ThemeProvider attribute="class" defaultTheme="system">
               <Navbar />
               {children}
               <Toaster />
@@ -47,5 +41,3 @@ export default function RootLayout({
     </AuthProvider>
   );
 }
-// export const dynamic = "force-dynamic";
-// export const revalidate = 0;
