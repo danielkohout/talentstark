@@ -51,9 +51,10 @@ const TeamSetup = () => {
           Erstelle dein erstes Team
         </h1>
         <p className="mx-auto mt-2 max-w-md text-gray-600 dark:text-gray-400">
-          Erstelle nun dein erstes Team. Teams können beispielsweise sein: "
-          <span className="text-blue-600">Abteilung Vertrieb</span>" oder auch "
-          <span className="text-blue-600">Niederlassung Heilbronn</span>"
+          Erstelle nun dein erstes Team. Teams können beispielsweise sein: &quot
+          <span className="text-blue-600">Abteilung Vertrieb</span>&quot oder
+          auch &quot
+          <span className="text-blue-600">Niederlassung Heilbronn</span>&quot
         </p>
         <Card className="mt-8 w-[350px]">
           <CardHeader>
