@@ -6,21 +6,52 @@ import { trpc } from "@/app/_trpc/client";
 import { Label } from "../ui/label";
 import { Loader2 } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { toast } from "../ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const EditCompany = () => {
+  const utils = trpc.useUtils();
   const [companyName, setCompanyName] = useState<string>("");
   const [companyStreet, setCompanyStreet] = useState<string>("");
   const [companyPostcode, setCompanyPostcode] = useState<number>(0);
-  const [companyCity, setCompanyCity] = useState<string>();
+  const [companyCity, setCompanyCity] = useState<string>("");
   const { data: company, isLoading } = trpc.companyRouter.getCompany.useQuery();
+  const { mutate: editCompany, isLoading: editCompanyLoading } =
+    trpc.companyRouter.editCompany.useMutation({
+      onSuccess: () => {
+        toast({
+          title: "Unternehmen erfolgreich gespeichert",
+          description: "Dein Unternehmen wurde erfolgreich aktualisiert",
+        });
+      },
+      onError: () => {
+        toast({
+          title: "Es ist ein Fehler aufgetreten",
+          description: "Speichern nicht möglich. Kontaktiere den Support.",
+          variant: "destructive",
+        });
+      },
+    });
 
   useEffect(() => {
     const initCompanyCity = async () => {
-      const x = company?.city;
-      setCompanyCity(x);
+      if (company) {
+        setCompanyCity(company?.city);
+        setCompanyName(company?.name);
+        setCompanyStreet(company.street);
+        setCompanyPostcode(company.postCode);
+      }
     };
     initCompanyCity();
-  }, [company?.city]);
+  }, [company]);
 
   useEffect(() => {
     const changeCompanyCity = async () => {
@@ -52,8 +83,9 @@ const EditCompany = () => {
             <Skeleton className="h-10 w-full" />
           ) : (
             <Input
+              value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
-              defaultValue={company?.name}
+              defaultValue={companyName}
             />
           )}
         </div>
@@ -63,10 +95,46 @@ const EditCompany = () => {
             <Skeleton className="h-10 w-full" />
           ) : (
             <Input
+              value={companyStreet}
               onChange={(e) => setCompanyStreet(e.target.value)}
               defaultValue={company?.street}
             />
           )}
+        </div>
+        <div className="">
+          <Label>Land</Label>
+          <Select defaultValue="de">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Wähle ein Land" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Länder</SelectLabel>
+                <SelectItem value="de">
+                  <span className="fi fi-de"></span> Deutschland
+                </SelectItem>
+                <SelectItem value="aus">
+                  <span className="fi fi-at"></span> Österreich
+                </SelectItem>
+                <SelectItem value="ch">
+                  <span className="fi fi-ch"></span> Schweiz
+                </SelectItem>
+                <SelectItem value="gr">
+                  <span className="fi fi-gr"></span> Griechenland
+                </SelectItem>
+                <SelectItem value="nl">
+                  <span className="fi fi-nl"></span> Niederlande
+                </SelectItem>
+                <SelectItem value="pl">
+                  <span className="fi fi-pl"></span> Polen
+                </SelectItem>
+                <SelectItem value="ae">
+                  <span className="fi fi-ae"></span> Vereinigte Arabische
+                  Emirate
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <div className="grid grid-cols-1 gap-2 md:grid-cols-5">
           <div className="md:col-span-2">
@@ -99,7 +167,23 @@ const EditCompany = () => {
           </div>
         </div>
         <div className="flex justify-center">
-          <Button>Speichern</Button>
+          <Button
+            onClick={async () => {
+              await editCompany({
+                id: company?.id!,
+                name: companyName,
+                street: companyStreet,
+                postcode: companyPostcode,
+                city: companyCity,
+              });
+            }}
+          >
+            {editCompanyLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Speichern"
+            )}
+          </Button>
         </div>
       </div>
     </div>

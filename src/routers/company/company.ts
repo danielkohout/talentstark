@@ -1,16 +1,7 @@
-import { z } from "zod";
-import { privateProcedure, publicProcedure, router } from "../trpc";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import prisma from "@/lib/db/prisma";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { privateProcedure, router } from "../trpc";
 
-interface CityData {
-  postalCode: string;
-  name: string;
-  // Füge weitere Felder hinzu, die du benötigst
-}
 export const companyRouter = router({
   addCompany: privateProcedure
     .input(
@@ -45,4 +36,28 @@ export const companyRouter = router({
       },
     });
   }),
+  editCompany: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        street: z.string(),
+        city: z.string(),
+        postcode: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { user } = ctx;
+      return await prisma.company.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          street: input.street,
+          city: input.city,
+          postCode: input.postcode,
+        },
+      });
+    }),
 });

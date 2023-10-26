@@ -7,6 +7,8 @@ import { cn, constructMetaData } from "@/lib/utils";
 import { Inter } from "next/font/google";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./globals.css";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = constructMetaData();
