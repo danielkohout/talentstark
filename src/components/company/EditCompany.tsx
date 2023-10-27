@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
+import { Skeleton } from "../ui/skeleton";
 type Input = z.infer<typeof editCompanySchema>;
 
 const EditCompany = () => {
@@ -132,7 +133,11 @@ const EditCompany = () => {
                   <FormItem>
                     <FormLabel>Unternehmensname</FormLabel>
                     <FormControl>
-                      <Input placeholder="Demo GmbH" {...field} />
+                      {user?.company?.name ? (
+                        <Input placeholder="Demo GmbH" {...field} />
+                      ) : (
+                        <Skeleton className="h-10 w-full" />
+                      )}
                     </FormControl>
                     <FormDescription>
                       Gib hier bitte deinen ofiziellen Unternehmensnamen ein.
@@ -149,26 +154,32 @@ const EditCompany = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Land</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Wähle ein Land" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {Object.keys(countryMapping).map((country: string) => {
-                          return (
-                            <SelectItem value={country} key={country}>
-                              <span className={`fi fi-${country}`}></span>{" "}
-                              {countryMapping[country]}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
+                    {user?.company?.country ? (
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={user?.company?.country}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Wähle ein Land" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {Object.keys(countryMapping).map(
+                            (country: string) => {
+                              return (
+                                <SelectItem value={country} key={country}>
+                                  <span className={`fi fi-${country}`}></span>{" "}
+                                  {countryMapping[country]}
+                                </SelectItem>
+                              );
+                            }
+                          )}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Skeleton className="h-10 w-full" />
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -181,7 +192,11 @@ const EditCompany = () => {
                   <FormItem>
                     <FormLabel>Straße und Hausnummer</FormLabel>
                     <FormControl>
-                      <Input placeholder="Musterstraße 12" {...field} />
+                      {user?.company?.street ? (
+                        <Input placeholder="Musterstraße 12" {...field} />
+                      ) : (
+                        <Skeleton className="h-10 w-full" />
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -195,11 +210,15 @@ const EditCompany = () => {
                   <FormItem>
                     <FormLabel>Postleitzahl</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Postleitzahl"
-                        {...field}
-                        type="number"
-                      />
+                      {user?.company?.postCode ? (
+                        <Input
+                          placeholder="Postleitzahl"
+                          {...field}
+                          type="number"
+                        />
+                      ) : (
+                        <Skeleton className="h-10 w-full" />
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,7 +232,11 @@ const EditCompany = () => {
                   <FormItem>
                     <FormLabel>Stadt</FormLabel>
                     <FormControl>
-                      <Input placeholder="München" {...field} />
+                      {user?.company?.city ? (
+                        <Input placeholder="München" {...field} />
+                      ) : (
+                        <Skeleton className="h-10 w-full" />
+                      )}
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -222,11 +245,7 @@ const EditCompany = () => {
 
               <div className="flex justify-end gap-2 pt-8">
                 <Button type="submit">
-                  {isLoading ? (
-                    <Loader2 className="h-4 w-4" />
-                  ) : (
-                    "Speichern"
-                  )}
+                  {isLoading ? <Loader2 className="h-4 w-4" /> : "Speichern"}
                 </Button>
               </div>
             </form>

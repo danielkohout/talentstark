@@ -1,6 +1,7 @@
 import AddUserDetails from "@/components/user/AddUserDetails";
 import EditUserDetails from "@/components/user/EditUserDetails";
 import getUser from "@/lib/auth/getUser";
+import { redirect } from "next/navigation";
 
 const page = async () => {
   const user = await getUser();
@@ -8,7 +9,7 @@ const page = async () => {
     return <AddUserDetails />;
   }
 
-  return <EditUserDetails />;
+  redirect("/account");
 };
 
 export default page;
