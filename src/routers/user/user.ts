@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db/prisma";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { editUserSchema } from "@/lib/types/user";
 
 export const userRouter = router({
   getUser: privateProcedure.query(async ({ ctx }) => {
@@ -28,12 +29,7 @@ export const userRouter = router({
   }),
 
   updateUser: privateProcedure
-    .input(
-      z.object({
-        firstName: z.string(),
-        lastName: z.string(),
-      })
-    )
+    .input(editUserSchema)
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
       console.log("user called");

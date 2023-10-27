@@ -1,17 +1,11 @@
 import prisma from "@/lib/db/prisma";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
+import { addCompanySchema } from "@/app/validators/company";
 
 export const companyRouter = router({
   addCompany: privateProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        street: z.string(),
-        city: z.string(),
-        postcode: z.number(),
-      })
-    )
+    .input(addCompanySchema)
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
       return await prisma.company.create({
@@ -20,6 +14,7 @@ export const companyRouter = router({
           street: input.street,
           city: input.city,
           postCode: input.postcode,
+          country: input.country,
           users: {
             connect: {
               id: userId,
@@ -43,7 +38,7 @@ export const companyRouter = router({
         name: z.string(),
         street: z.string(),
         city: z.string(),
-        postcode: z.number(),
+        postcode: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {

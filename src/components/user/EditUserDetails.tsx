@@ -8,8 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Skeleton } from "../ui/skeleton";
 import { toast } from "../ui/use-toast";
-import { Loader2 } from "lucide-react";
-
+import { AlertCircle, Loader2 } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 const EditUserDetails = () => {
   const utils = trpc.useUtils();
   const { data: user, isLoading } = trpc.userRouter.getUser.useQuery();
@@ -27,7 +27,7 @@ const EditUserDetails = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
   } = useForm<editUserSchema>({
     resolver: zodResolver(editUserSchema),
@@ -36,7 +36,7 @@ const EditUserDetails = () => {
   return (
     <div className="mx-auto my-8 max-w-7xl px-6 lg:px-8">
       <div className="flex flex-col items-center">
-        <div className="mx-auto flex items-center gap-2 rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200">
+        <div className="mx-auto flex items-center gap-2 rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200 dark:bg-gray-900 dark:text-gray-400">
           Angemeldet mit: {user?.email || <Skeleton className="h-5 w-40" />}
         </div>
         <h1 className="mx-auto mt-8 max-w-sm text-center text-2xl font-bold">
@@ -55,7 +55,13 @@ const EditUserDetails = () => {
           ) : (
             <Skeleton className="h-10 w-full" />
           )}
-          {errors.firstName && <p>Bitte gibt deinen Vornamen ein</p>}
+          {errors.firstName && (
+            <Alert className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Fehler</AlertTitle>
+              <AlertDescription>{errors.firstName.message}</AlertDescription>
+            </Alert>
+          )}
         </div>
         <div>
           <Label>Nachname</Label>
@@ -63,6 +69,13 @@ const EditUserDetails = () => {
             <Input {...register("lastName")} defaultValue={user?.lastName} />
           ) : (
             <Skeleton className="h-10 w-full" />
+          )}
+          {errors.lastName && (
+            <Alert className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Fehler</AlertTitle>
+              <AlertDescription>{errors.lastName.message}</AlertDescription>
+            </Alert>
           )}
         </div>
         <div className="flex justify-center">
