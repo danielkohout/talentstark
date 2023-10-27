@@ -4,7 +4,7 @@ import getUser from "@/lib/auth/getUser";
 
 const page = async () => {
   const user = await getUser();
-  if (!user?.firstName) {
+  if (user?.firstName) {
     return <AddUserDetails />;
   }
 

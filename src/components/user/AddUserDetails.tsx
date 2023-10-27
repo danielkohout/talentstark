@@ -1,16 +1,37 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Progress } from "../ui/progress";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Progress } from "../ui/progress";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { editUserSchema } from "@/lib/types/user";
+import { z } from "zod";
+import { addUserDetails } from "@/app/validators/user";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
+type Input = z.infer<typeof editUserSchema>;
 
 const AddUserDetails = () => {
   const utils = trpc.useUtils();
@@ -23,33 +44,21 @@ const AddUserDetails = () => {
       onSuccess: () => {
         utils.userRouter.getUser.invalidate();
         toast({
-          title: "Benutzer erfolgreich geändert",
-          description: `Dein Benutzer wurde erfolgreich geändert. Du wirst gleich weitergeleitet.`,
+          title: "Benutzer erfolgreich angelegt",
+          description: `Du wirst gleich weitergeleitet.`,
           variant: "default",
-          action: (
-            <ToastAction altText="Zurück zum Dashboard">
-              <Link href={"/"}>Dashboard</Link>
-            </ToastAction>
-          ),
         });
-        setTimeout(() => {
-          router.push("/company");
-        }, 2000);
+        router.push("/company");
       },
     });
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
 
-  useEffect(() => {
-    if (!isLoading && user) {
-      if (user.firstName !== null) {
-        setFirstName(user.firstName);
-      }
-      if (user.lastName !== null) {
-        setLastName(user.lastName);
-      }
-    }
-  }, [isLoading, user]);
+  const form = useForm<Input>({
+    resolver: zodResolver(addUserDetails),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
+  });
 
   return (
     <div className="py-10">
@@ -73,46 +82,59 @@ const AddUserDetails = () => {
             Account vollständig ein.
           </p>
         </div>
-
-        <div className="mx-auto mt-8 max-w-sm space-y-2">
-          <div>
-            <Label>Vorname</Label>
-            {isLoading ? (
-              <Skeleton className="h-10 w-full" />
-            ) : (
-              <Input required onChange={(e) => setFirstName(e.target.value)} />
-            )}
-          </div>
-
-          <div>
-            <Label>Nachname</Label>
-            {isLoading ? (
-              <Skeleton className="h-10 w-full" />
-            ) : (
-              <Input required onChange={(e) => setLastName(e.target.value)} />
-            )}
-          </div>
-        </div>
-        <div className="mt-8 flex justify-center">
-          <Button
-            onClick={() => {
-              if (firstName && lastName) {
-                updateUser({ firstName, lastName });
-              } else {
-                toast({
-                  title: "Gib deinen Vor- & Nachnamen ein",
-                  description: `Deine Daten werden sicher gespeichert und niemals an Dritte weitergegeben. Mehr dazu findest du unter Datenschutz.`,
-                  variant: "destructive",
-                });
-              }
-            }}
-          >
-            {updateUserLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              "Speichern & weiter"
-            )}
-          </Button>
+        <div className="">
+          <Card className="mx-auto mt-8 w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Vervollständige dein Profil</CardTitle>
+              <CardDescription>
+                Uns fehlen noch ein paar Informationen zu deinem Account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit((data) => updateUser(data))}
+                  className="space-y-3"
+                >
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Vorname</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Max" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nachname</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Muster" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-center">
+                    <Button type="submit">
+                      {updateUserLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        "Speichern und weiter"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
