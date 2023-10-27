@@ -34,7 +34,6 @@ export const companyRouter = router({
   editCompany: privateProcedure
     .input(
       z.object({
-        id: z.string(),
         name: z.string(),
         street: z.string(),
         city: z.string(),
@@ -43,9 +42,10 @@ export const companyRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
+      const companyId = user?.companyId as string;
       return await prisma.company.update({
         where: {
-          id: input.id,
+          id: companyId,
         },
         data: {
           name: input.name,

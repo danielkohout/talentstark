@@ -1,8 +1,10 @@
-"use client";
+import EditCompany from "@/components/company/EditCompany";
+import { buttonVariants } from "@/components/ui/button";
+import EditUserNames from "@/components/user/EditUserNames";
 import Link from "next/link";
-import { buttonVariants } from "../ui/button";
-import EditUserNames from "./EditUserNames";
-const EditUserDetails = () => {
+import React from "react";
+
+const page = () => {
   return (
     <div className="">
       <div className="border-b ">
@@ -35,12 +37,13 @@ const EditUserDetails = () => {
             </li>
           </ul>
         </div>
-        <div className="mt-10 md:col-span-8 md:mr-4">
+        <div className="mt-10 space-y-8 md:col-span-8 md:mr-4">
           <EditUserNames />
+          <EditCompany />
         </div>
       </div>
     </div>
   );
 };
 
-export default EditUserDetails;
+export default page;
