@@ -21,7 +21,7 @@ const EditCompany = () => {
   const utils = trpc.useUtils();
   const [companyName, setCompanyName] = useState<string>("");
   const [companyStreet, setCompanyStreet] = useState<string>("");
-  const [companyPostcode, setCompanyPostcode] = useState<number>(0);
+  const [companyPostcode, setCompanyPostcode] = useState<string>("");
   const [companyCity, setCompanyCity] = useState<string>("");
   const { data: company, isLoading } = trpc.companyRouter.getCompany.useQuery();
   const { mutate: editCompany, isLoading: editCompanyLoading } =
@@ -146,7 +146,7 @@ const EditCompany = () => {
                 type="number"
                 maxLength={5}
                 onChange={(e) => {
-                  setCompanyPostcode(Number(e.target.value));
+                  setCompanyPostcode(e.target.value);
                 }}
                 defaultValue={company?.postCode}
               />
