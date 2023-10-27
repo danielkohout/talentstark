@@ -3,95 +3,78 @@ import { trpc } from "@/app/_trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
-import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
-import { UserCog2 } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { editUserSchema } from "@/lib/types/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Skeleton } from "../ui/skeleton";
+import { toast } from "../ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 const EditUserDetails = () => {
   const utils = trpc.useUtils();
   const { data: user, isLoading } = trpc.userRouter.getUser.useQuery();
-  const { toast } = useToast();
-  const updateUser = trpc.userRouter.updateUser.useMutation({
+  const { mutate: editUser } = trpc.userRouter.updateUser.useMutation({
     onSuccess: () => {
-      utils.userRouter.getUser.invalidate();
       toast({
-        title: "Benutzer erfolgreich geändert",
-        description: `Dein Benutzer wurde erfolgreich geändert.`,
-        variant: "default",
-        action: (
-          <ToastAction altText="Zurück zum Dashboard">
-            <Link href={"/"}>Dashboard</Link>
-          </ToastAction>
-        ),
+        title: "Nutzer erfolgreich aktualisiert!",
+        description: "Dein Nutzer wurde erfolgreich aktualisiert!",
       });
+      utils.userRouter.invalidate();
+      reset();
     },
   });
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
 
-  useEffect(() => {
-    if (!isLoading && user) {
-      if (user.firstName !== null) {
-        setFirstName(user.firstName);
-      }
-      if (user.lastName !== null) {
-        setLastName(user.lastName);
-      }
-    }
-  }, [isLoading, user]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<editUserSchema>({
+    resolver: zodResolver(editUserSchema),
+  });
 
   return (
     <div className="mx-auto my-8 max-w-7xl px-6 lg:px-8">
       <div className="flex flex-col items-center">
-        <div className="mx-auto inline-block rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200">
-          Angemeldet mit: {user?.email}
+        <div className="mx-auto flex items-center gap-2 rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200">
+          Angemeldet mit: {user?.email || <Skeleton className="h-5 w-40" />}
         </div>
-        <UserCog2 className="mt-8 h-10 w-10" />
-        <h1 className="text-center text-2xl font-bold">
-          Bearbeite deinen Account
+        <h1 className="mx-auto mt-8 max-w-sm text-center text-2xl font-bold">
+          Hallo {user?.firstName}, hier kannst du die Informationen zu deinem
+          User bearbeiten.
         </h1>
       </div>
-
-      <div className="mx-auto mt-8 max-w-sm space-y-2 rounded-lg border p-6 shadow-sm">
+      <form
+        onSubmit={handleSubmit((data) => editUser(data))}
+        className="mx-auto mt-8 max-w-sm space-y-2"
+      >
         <div>
           <Label>Vorname</Label>
-          {isLoading ? (
-            <Skeleton className="h-10 w-full" />
+          {user?.firstName ? (
+            <Input {...register("firstName")} defaultValue={user?.firstName} />
           ) : (
-            <Input
-              onChange={(e) => setFirstName(e.target.value)}
-              defaultValue={`${user?.firstName}`}
-            />
+            <Skeleton className="h-10 w-full" />
           )}
+          {errors.firstName && <p>Bitte gibt deinen Vornamen ein</p>}
         </div>
-
         <div>
           <Label>Nachname</Label>
-          {isLoading ? (
-            <Skeleton className="h-10 w-full" />
+          {user?.lastName ? (
+            <Input {...register("lastName")} defaultValue={user?.lastName} />
           ) : (
-            <Input
-              onChange={(e) => setLastName(e.target.value)}
-              defaultValue={`${user?.lastName}`}
-            />
+            <Skeleton className="h-10 w-full" />
           )}
         </div>
-      </div>
-      <div className="mt-8 flex justify-center">
-        <Button
-          onClick={async () => {
-            updateUser.mutate({
-              firstName: firstName,
-              lastName: lastName,
-            });
-          }}
-        >
-          Speichern
-        </Button>
-      </div>
+        <div className="flex justify-center">
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Speichern"
+            )}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

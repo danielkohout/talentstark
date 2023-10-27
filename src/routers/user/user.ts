@@ -36,6 +36,8 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
+      console.log("user called");
+
       const updatedUser = await prisma.user.update({
         where: {
           id: userId,
