@@ -14,7 +14,6 @@ const Page = async () => {
     <>
       <Dashboard />
       <UserTeams />
-      <TodoList />
     </>
   );
 };
