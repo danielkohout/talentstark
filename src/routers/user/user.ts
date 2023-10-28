@@ -32,8 +32,6 @@ export const userRouter = router({
     .input(editUserSchema)
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
-      console.log("user called");
-
       const updatedUser = await prisma.user.update({
         where: {
           id: userId,

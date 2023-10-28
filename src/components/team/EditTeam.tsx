@@ -1,58 +1,121 @@
 "use client";
-import { Team } from "@prisma/client";
-import React from "react";
+import { trpc } from "@/app/_trpc/client";
+import { editTeamSchema } from "@/app/validators/team";
+import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "../ui/card";
-import Link from "next/link";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Settings } from "lucide-react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Skeleton } from "../ui/skeleton";
+import { toast } from "../ui/use-toast";
+import { useEffect } from "react";
 
-interface editTeamProps {
-  team: Team;
+interface TeamProps {
+  id: string;
 }
 
-const EditTeam = ({ team }: editTeamProps) => {
+type Input = z.infer<typeof editTeamSchema>;
+const EditTeam = ({ id }: TeamProps) => {
+  const { data: team } = trpc.teamRouter.getTeam.useQuery({ id: id });
+
+  const utils = trpc.useUtils();
+  const form = useForm<Input>({
+    resolver: zodResolver(editTeamSchema),
+  });
+  const { mutate: editTeamName, isLoading } =
+    trpc.teamRouter.editTeam.useMutation({
+      onSuccess: () => {
+        utils.teamRouter.getTeam.invalidate();
+        toast({
+          title: "Team aktualisiert",
+        });
+      },
+      onError: () => {
+        utils.teamRouter.getTeam.invalidate();
+        toast({
+          title: "Es ist ein Fehler aufgetreten.",
+          variant: "destructive",
+        });
+      },
+    });
+
+  console.log(form.watch());
+  useEffect(() => {
+    const setInitalValues = async () => {
+      form.setValue("id", team?.team.id as string);
+      form.setValue("name", team?.team.name as string);
+    };
+    setInitalValues();
+  }, [team?.team]);
+
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Jobs</CardTitle>
-            <CardDescription>Jobs zu diesem Team</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold lg:text-3xl">8</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Bewerbungen</CardTitle>
-            <CardDescription>Bewerbung zu diesem Team</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold lg:text-3xl">211</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Beliebtheitsindikator</CardTitle>
-            <CardDescription>
-              So kommt das Team bei Bewerbern an
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold lg:text-3xl">8.52/10</p>
-          </CardContent>
-        </Card>
-      </div>
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold">Jobs in diesem Team</h2>
-      </div>
-    </div>
+    <Sheet>
+      <SheetTrigger asChild>
+        <div className="inline-block cursor-pointer px-2">
+          <Settings className="h-4 w-4" />
+        </div>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>{team?.team.name}</SheetTitle>
+        </SheetHeader>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit((data) => editTeamName(data))}
+            className="mt-8 space-y-3"
+          >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Teamname</FormLabel>
+                  <FormControl>
+                    {team?.team.name ? (
+                      <Input {...field} />
+                    ) : (
+                      <Skeleton className="h-10 w-full" />
+                    )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="space-y-2">
+              <SheetClose className="block w-full">
+                <Button type="button" className="w-full" variant={"outline"}>
+                  Abbrechen
+                </Button>
+              </SheetClose>
+              <Button type="submit" className="w-full">
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Speichern"
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </SheetContent>
+    </Sheet>
   );
 };
 
