@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/lib/Providers";
+import Provider from "@/app/_trpc/Provider";
 import AuthProvider from "@/lib/auth/AuthProvider";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { cn, constructMetaData } from "@/lib/utils";
@@ -25,20 +25,17 @@ export default function RootLayout({
         <Head>
           <link rel="icon" href="./favicon.ico" sizes="any" />
         </Head>
-        <Providers>
-          <body
-            className={cn(
-              "min-h-screen font-sans antialiased",
-              inter.className
-            )}
-          >
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <body
+          className={cn("min-h-screen font-sans antialiased", inter.className)}
+        >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Provider>
               <Navbar />
               {children}
               <Toaster />
-            </ThemeProvider>
-          </body>
-        </Providers>
+            </Provider>
+          </ThemeProvider>
+        </body>
       </html>
     </AuthProvider>
   );

@@ -1,3 +1,4 @@
+import TodoList from "@/components/TodoList";
 import Dashboard from "@/components/dashboard/Dashboard";
 import UserTeams from "@/components/team/UserTeams";
 import getUser from "@/lib/auth/getUser";
@@ -13,6 +14,7 @@ const Page = async () => {
     <>
       <Dashboard />
       <UserTeams />
+      <TodoList />
     </>
   );
 };

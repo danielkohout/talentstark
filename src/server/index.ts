@@ -7,7 +7,7 @@ import { jobRouter } from "./job/job";
 import { userRouter } from "./user/user";
 import { companyRouter } from "./company/company";
 import { teamRouter } from "./team/team";
-export const appRouter = router({ 
+export const appRouter = router({
   deleteJob: privateProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -33,6 +33,9 @@ export const appRouter = router({
   userRouter,
   companyRouter,
   teamRouter,
+  getTodos: publicProcedure.query(async () => {
+    return [10, 20, 30];
+  }),
 });
 
 export type AppRouter = typeof appRouter;

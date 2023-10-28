@@ -4,6 +4,7 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import { getServerSession } from "next-auth";
 
 const t = initTRPC.create();
+
 const middleware = t.middleware;
 const isAuth = middleware(async (opts) => {
   const session = await getServerSession(authOptions);
