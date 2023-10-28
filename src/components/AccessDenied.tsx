@@ -1,8 +1,5 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import "./components.css";
 import Link from "next/link";
+import "./components.css";
 import { buttonVariants } from "./ui/button";
 
 const AccessDenied = () => {

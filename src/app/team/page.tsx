@@ -10,10 +10,10 @@ const page = async () => {
       userId: user!.id,
     },
   });
-  if (userTeams && userTeams.length <= 0) {
+  // if (userTeams && userTeams.length <= 0) {
     return <TeamSetup />;
-  }
-  return <TeamOverview/>
+  // }
+  // return <TeamOverview/>
 };
 
 export default page;

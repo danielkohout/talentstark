@@ -1,109 +1,100 @@
 "use client";
-import { trpc } from "@/app/_trpc/client";
+
 import { Button } from "@/components/ui/button";
+import { Loader2, Store } from "lucide-react";
+
+import { addTeamSchema } from "@/app/validators/team";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { trpc } from "@/app/_trpc/client";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Progress } from "../ui/progress";
+} from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
-import { useState } from "react";
-import { toast } from "../ui/use-toast";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+type Input = z.infer<typeof addTeamSchema>;
+
 const TeamSetup = () => {
   const utils = trpc.useUtils();
   const router = useRouter();
-  const [teamName, setTeamName] = useState<string>("");
+  const { mutate: addTeam, isLoading } = trpc.teamRouter.addTeam.useMutation({
+    onSuccess: () => {
+      utils.userRouter.getUser.invalidate();
+      router.push("/");
+    },
+  });
   const { data: user } = trpc.userRouter.getUser.useQuery();
-  const { mutate: addTeam, isLoading: addTeamLoading } =
-    trpc.teamRouter.addTeam.useMutation({
-      onSuccess: () => {
-        toast({
-          title: "Team erfolgreich angelegt.",
-          description:
-            "Dein Team wurde erfolgreich angelegt. Der Setup-Prozess ist damit zu ende.",
-        });
-        utils.invalidate();
-        router.push("/");
-      },
-    });
 
+  const form = useForm<Input>({
+    resolver: zodResolver(addTeamSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
   return (
-    <div className="mx-auto mt-10 max-w-7xl px-6 lg:px-8">
-      <div className="flex flex-col items-center justify-center text-center">
-        <div className="mx-auto flex max-w-sm flex-col items-center">
-          <div className="mx-auto flex items-center gap-2 rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:ring-gray-400">
-            Angemeldet mit: {user?.email || <Skeleton className="h-5 w-40" />}
-          </div>
-          <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-            Team erstellen
-          </p>
-          <Progress className="mt-1 h-2" value={100} />
-        </div>
-        <h1 className="mt-8 flex items-center gap-2 text-center text-2xl font-bold lg:text-4xl">
-          Erstelle dein erstes Team
-        </h1>
-        <p className="mx-auto mt-2 max-w-md text-gray-600 dark:text-gray-400">
-          Erstelle nun dein erstes Team. Teams können beispielsweise sein: &quot
-          <span className="text-blue-600">Abteilung Vertrieb</span>&quot oder
-          auch &quot
-          <span className="text-blue-600">Niederlassung Heilbronn</span>&quot
-        </p>
-        <Card className="mt-8 w-[350px]">
-          <CardHeader>
-            <CardTitle>Team erstellen</CardTitle>
-            <CardDescription>
-              Erstelle dein erstes Team in wenigen Sekunden.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Teamname</Label>
-                  <Input
-                    onChange={(e) => setTeamName(e.target.value)}
-                    id="name"
-                    placeholder="Dein Team"
-                  />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-center">
-            <Button
-              onClick={() => {
-                if (!teamName) {
-                  toast({
-                    title: "Vergib einen Teamnamen",
-                    description:
-                      "Teamnamen können Abteilungen, Standorte oder eigene Ideen sein.",
-                    variant: "destructive",
-                  });
-                } else {
-                  addTeam({
-                    teamName: teamName,
-                  });
-                }
-              }}
-              className="w-full"
+    <div className="mx-auto max-w-7xl px-6 md:px-8">
+      <Card className="mx-auto mt-8 max-w-sm">
+        <CardHeader>
+          <CardTitle>Lege ein Team an</CardTitle>
+          <CardDescription>
+            Dein Teamname kann später bearbeitet werden.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit((data) => addTeam(data))}
+              className="space-y-4"
             >
-              {addTeamLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Team anlegen"
-              )}
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Vertrieb" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Der Teamname kann später geändert werden.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Alert>
+                <Store className="h-4 w-4" />
+                <AlertTitle>
+                  {user?.company?.name || <Skeleton className="h-8 w-full" />}
+                </AlertTitle>
+                <AlertDescription>
+                  Dieses Team wird automatisch deinem Unternehmen zugeordnet.
+                </AlertDescription>
+              </Alert>
+              <Button disabled={isLoading} type="submit" className="w-full">
+                {isLoading ? <Loader2 className="h-4 w-4" /> : "Team anlegen"}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
