@@ -1,3 +1,4 @@
+import TeamOverview from "@/components/team/TeamOverview";
 import TeamSetup from "@/components/team/TeamSetup";
 import getUser from "@/lib/auth/getUser";
 import prisma from "@/lib/db/prisma";
@@ -12,7 +13,7 @@ const page = async () => {
   if (userTeams && userTeams.length <= 0) {
     return <TeamSetup />;
   }
-  return <div>{JSON.stringify(userTeams)}</div>;
+  return <TeamOverview/>
 };
 
 export default page;
