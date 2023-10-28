@@ -25,13 +25,13 @@ const Dashboard = () => {
   useEffect(() => {
     if (!jobLoading && jobs) {
       const jobCount = jobs.length;
-      toast({
-        title: "Jobs geladen",
-        description: `Es ${
-          jobCount === 1 ? "ist ein Job" : `sind ${jobCount} Jobs`
-        } vorhanden.`,
-        action: <ToastAction altText="Schließen">Schließen</ToastAction>,
-      });
+      // toast({
+      //   title: "Jobs geladen",
+      //   description: `Es ${
+      //     jobCount === 1 ? "ist ein Job" : `sind ${jobCount} Jobs`
+      //   } vorhanden.`,
+      //   action: <ToastAction altText="Schließen">Schließen</ToastAction>,
+      // });
     }
   }, [jobLoading, jobs]);
 

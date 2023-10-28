@@ -14,15 +14,15 @@ export const teamRouter = router({
   addTeam: privateProcedure
     .input(
       z.object({
-        teamName: z.string(),
+        name: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const teamName = input.teamName;
+      const name = input.name;
       const { user } = ctx;
       const newTeam = await prisma.team.create({
         data: {
-          name: teamName,
+          name: name,
           Company: {
             connect: {
               id: user?.companyId!,
