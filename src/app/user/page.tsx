@@ -8,7 +8,6 @@ const page = async () => {
   if (!user?.firstName) {
     return <AddUserDetails />;
   }
-
   redirect("/account");
 };
 

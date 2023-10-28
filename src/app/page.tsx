@@ -1,5 +1,5 @@
 import Dashboard from "@/components/dashboard/Dashboard";
-import UserTeams from "@/components/dashboard/UserTeams";
+import UserTeams from "@/components/team/UserTeams";
 import getUser from "@/lib/auth/getUser";
 import { redirect } from "next/navigation";
 
