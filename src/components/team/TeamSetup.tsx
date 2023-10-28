@@ -29,6 +29,9 @@ import {
 } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import { useRouter } from "next/navigation";
+import { Badge } from "../ui/badge";
+import { Progress } from "../ui/progress";
+import { toast } from "../ui/use-toast";
 type Input = z.infer<typeof addTeamSchema>;
 
 const TeamSetup = () => {
@@ -37,6 +40,10 @@ const TeamSetup = () => {
   const { mutate: addTeam, isLoading } = trpc.teamRouter.addTeam.useMutation({
     onSuccess: () => {
       utils.userRouter.getUser.invalidate();
+      toast({
+        title: "Erfolgreich! Dein Account ist nun bereit!",
+        description: "Du wirst gleich weitergeleitet gib uns noch kurz...",
+      });
       router.push("/");
     },
   });
@@ -49,52 +56,68 @@ const TeamSetup = () => {
     },
   });
   return (
-    <div className="mx-auto max-w-7xl px-6 md:px-8">
-      <Card className="mx-auto mt-8 max-w-sm">
-        <CardHeader>
-          <CardTitle>Lege ein Team an</CardTitle>
-          <CardDescription>
-            Dein Teamname kann später bearbeitet werden.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit((data) => addTeam(data))}
-              className="space-y-4"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Team</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Vertrieb" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Der Teamname kann später geändert werden.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Alert>
-                <Store className="h-4 w-4" />
-                <AlertTitle>
-                  {user?.company?.name || <Skeleton className="h-8 w-full" />}
-                </AlertTitle>
-                <AlertDescription>
-                  Dieses Team wird automatisch deinem Unternehmen zugeordnet.
-                </AlertDescription>
-              </Alert>
-              <Button disabled={isLoading} type="submit" className="w-full">
-                {isLoading ? <Loader2 className="h-4 w-4" /> : "Team anlegen"}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+    <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+      <div className="mx-auto flex max-w-sm flex-col items-center">
+        <div className="mx-auto flex items-center gap-2 rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:ring-gray-400">
+          Angemeldet mit: {user?.email || <Skeleton className="h-5 w-40" />}
+        </div>
+        <Badge variant="secondary" className="mb-2 mt-8">
+          Schritt 3: Team
+        </Badge>
+        <Progress className="mt-1 h-2" value={100} />
+        <p className="mt-4 text-center text-gray-600 dark:text-gray-400">
+          Ein Team hilft dir später Struktur und Ordnung zu bewahren. Teams in
+          talentstark können beispielsweise Abteilungen, Standorte oder eigene
+          Ideen sein.
+        </p>
+      </div>
+      <div className="mx-auto mt-10 max-w-md">
+        <Card className="mx-auto mt-8 max-w-sm">
+          <CardHeader>
+            <CardTitle>Lege ein Team an</CardTitle>
+            <CardDescription>
+              Dein Teamname kann später bearbeitet werden.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit((data) => addTeam(data))}
+                className="space-y-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Team</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Vertrieb" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Der Teamname kann später geändert werden.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Alert>
+                  <Store className="h-4 w-4" />
+                  <AlertTitle>
+                    {user?.company?.name || <Skeleton className="h-8 w-full" />}
+                  </AlertTitle>
+                  <AlertDescription>
+                    Dieses Team wird automatisch deinem Unternehmen zugeordnet.
+                  </AlertDescription>
+                </Alert>
+                <Button disabled={isLoading} type="submit" className="w-full">
+                  {isLoading ? <Loader2 className="h-4 w-4" /> : "Team anlegen"}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

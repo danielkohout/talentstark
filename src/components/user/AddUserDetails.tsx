@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import { Badge } from "../ui/badge";
 type Input = z.infer<typeof editUserSchema>;
 
 const AddUserDetails = () => {
@@ -66,9 +67,9 @@ const AddUserDetails = () => {
         <div className="mx-auto flex items-center gap-2 rounded-full bg-white px-8 py-2 text-sm text-gray-600 shadow ring-1 ring-inset ring-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:ring-gray-400">
           Angemeldet mit: {user?.email || <Skeleton className="h-5 w-40" />}
         </div>
-        <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-          Benutzer Informationen
-        </p>
+        <Badge variant="secondary" className="mb-2 mt-8">
+          Schritt 1: Benutzerprofil
+        </Badge>
         <Progress className="mt-1 h-2" value={33} />
       </div>
       <div className="mx-auto mt-10 max-w-7xl px-6 lg:px-8">
@@ -78,8 +79,8 @@ const AddUserDetails = () => {
           </h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             Du hast dich für eine ausgezeichnete Lösung im HR & Recruiting
-            Bereich entschieden. Um starten zu können richten wir nun deinen
-            Account vollständig ein.
+            Bereich entschieden. Um starten zu können richten wir nun gemeinsam
+            deinen Account ein. Dies dauert ungefähr eine Minute.
           </p>
         </div>
         <div className="">
@@ -94,7 +95,7 @@ const AddUserDetails = () => {
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit((data) => updateUser(data))}
-                  className="space-y-3"
+                  className="space-y-4"
                 >
                   <FormField
                     control={form.control}
@@ -123,7 +124,7 @@ const AddUserDetails = () => {
                     )}
                   />
                   <div className="flex justify-center">
-                    <Button type="submit">
+                    <Button type="submit" className="w-full">
                       {updateUserLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
