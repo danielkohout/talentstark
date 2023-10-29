@@ -1,6 +1,6 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
-import { editTeamSchema } from "@/app/validators/team";
+import { editTeamSchema } from "@/validators/team";
 import { Button } from "@/components/ui/button";
 import {
   Form,

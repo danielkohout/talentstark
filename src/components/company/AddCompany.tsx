@@ -34,7 +34,7 @@ import {
 } from "../ui/select";
 import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
-import { addCompanySchema } from "@/app/validators/company";
+import { addCompanySchema } from "@/validators/company";
 import { Skeleton } from "../ui/skeleton";
 import { Progress } from "../ui/progress";
 import { Badge } from "../ui/badge";

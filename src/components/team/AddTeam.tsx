@@ -17,7 +17,7 @@ import { Loader2, Store, Terminal, UserPlus2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { addTeamSchema } from "@/app/validators/team";
+import { addTeamSchema } from "@/validators/team";
 
 import {
   Form,

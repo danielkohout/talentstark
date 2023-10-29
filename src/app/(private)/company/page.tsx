@@ -1,5 +1,4 @@
 import AddCompany from "@/components/company/AddCompany";
-import EditCompany from "@/components/company/EditCompany";
 import getUser from "@/lib/auth/getUser";
 import { redirect } from "next/navigation";
 

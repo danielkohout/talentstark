@@ -1,7 +1,7 @@
 import prisma from "@/lib/db/prisma";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
-import { addCompanySchema } from "@/app/validators/company";
+import { addCompanySchema } from "@/validators/company";
 
 export const companyRouter = router({
   addCompany: privateProcedure

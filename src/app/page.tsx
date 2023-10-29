@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import TodoList from "@/components/TodoList";
 import Dashboard from "@/components/dashboard/Dashboard";
 import UserTeams from "@/components/team/UserTeams";
@@ -12,6 +13,7 @@ const Page = async () => {
 
   return (
     <>
+      <Navbar />
       <Dashboard />
       <UserTeams />
     </>

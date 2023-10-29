@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Loader2, Store } from "lucide-react";
 
-import { addTeamSchema } from "@/app/validators/team";
+import { addTeamSchema } from "@/validators/team";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";

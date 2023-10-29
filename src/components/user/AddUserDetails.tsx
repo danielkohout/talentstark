@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editUserSchema } from "@/lib/types/user";
 import { z } from "zod";
-import { addUserDetails } from "@/app/validators/user";
+import { addUserDetails } from "@/validators/user";
 import { Button } from "@/components/ui/button";
 import {
   Form,

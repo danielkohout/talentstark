@@ -1,7 +1,7 @@
 "use client";
 
 import { trpc } from "@/app/_trpc/client";
-import { editUserNamesSchema } from "@/app/validators/user";
+import { editUserNamesSchema } from "@/validators/user";
 import {
   Form,
   FormControl,

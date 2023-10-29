@@ -1,8 +1,8 @@
 import prisma from "@/lib/db/prisma";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
-import { editCompanySchema } from "@/app/validators/company";
-import { editTeamSchema } from "@/app/validators/team";
+import { editCompanySchema } from "@/validators/company";
+import { editTeamSchema } from "@/validators/team";
 import { TRPCError } from "@trpc/server";
 import { redirect } from "next/navigation";
 
