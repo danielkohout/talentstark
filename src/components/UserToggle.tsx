@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User } from "lucide-react";
 import { LoginButton } from "./ui/authButtons";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { trpc } from "@/app/_trpc/client";
 import Link from "next/link";
 const UserToggle = () => {
@@ -16,10 +16,15 @@ const UserToggle = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Button variant="outline" size="icon">
+        <div
+          className={buttonVariants({
+            variant: "outline",
+            size: "icon",
+          })}
+        >
           <User className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all " />
           <span className="sr-only">User Menu</span>
-        </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>

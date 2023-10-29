@@ -24,9 +24,8 @@ const Navbar = () => {
           </Link>
           {/* todo: mobile Navigation */}
           <div
-            className={cn("hidden items-center space-x-2 sm:flex lg:flex", {})}
+            className={cn("hidden items-center sm:flex lg:flex gap-2", {})}
           >
-            <div>
               <Link
                 className={buttonVariants({
                   variant: "ghost",
@@ -53,7 +52,7 @@ const Navbar = () => {
               </Link>
               {/* <UserToggle /> */}
               <ModeToggle />
-            </div>
+              <UserToggle />
           </div>
         </div>
       </MaxWidthWrapper>

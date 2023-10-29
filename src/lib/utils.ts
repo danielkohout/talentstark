@@ -11,7 +11,7 @@ export function constructMetaData({
   description = "HR & Recruiting Lösungen",
   image = "/placeholder.png",
   icons = "/favicon.ico",
-  noIndex = false,
+  noIndex = true,
 }: {
   title?: string;
   description?: string;

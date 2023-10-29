@@ -9,6 +9,10 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/auth/login",
+    verifyRequest: `/auth/verify`,
+  },
   providers: [
     Email({
       server: {
