@@ -1,6 +1,7 @@
+"use client";
 import LoginForm from "@/components/user/LoginForm";
 
-const page = async () => {
+const page = () => {
   return <LoginForm />;
 };
 

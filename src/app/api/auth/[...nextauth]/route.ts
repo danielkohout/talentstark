@@ -25,19 +25,19 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
-      sendVerificationRequest({
-        identifier: email,
-        url,
-        theme,
-        provider: { server, from },
-      }) {
-        customVerificationRequest({
-          identifier: email,
-          theme,
-          url,
-          provider: { server, from },
-        });
-      },
+      // sendVerificationRequest({
+      //   identifier: email,
+      //   url,
+      //   theme,
+      //   provider: { server, from },
+      // }) {
+      //   customVerificationRequest({
+      //     identifier: email,
+      //     theme,
+      //     url,
+      //     provider: { server, from },
+      //   });
+      // },
     }),
   ],
 };
