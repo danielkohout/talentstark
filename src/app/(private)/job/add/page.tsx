@@ -1,8 +1,9 @@
 import { serverClient } from "@/app/_trpc/serverClient";
+import AddJob from "@/components/jobs/AddJob";
 import React from "react";
 
 const page = async () => {
-  return <div>{JSON.stringify("data")}</div>;
+  return <AddJob />;
 };
 
 export default page;

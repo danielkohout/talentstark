@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { privateProcedure, publicProcedure, router } from "../trpc";
 import prisma from "@/lib/db/prisma";
+import { addJobSchema } from "@/validators/job";
 
 export const jobRouter = router({
   getCompanyJobs: privateProcedure.query(async ({ ctx }) => {
@@ -19,8 +20,12 @@ export const jobRouter = router({
         Team: true,
       },
     });
-
     return jobs; // Die gefundenen Jobs zurückgeben
   }),
+
+  addJob: privateProcedure.input(addJobSchema).mutation(async ({ctx, input}) => {
+    console.log('input', input)
+    return "Hallo"
+  })
 
 });
