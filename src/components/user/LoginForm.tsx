@@ -46,13 +46,13 @@ const LoginForm = () => {
     });
   };
   return (
-    <>
+    <div className="min-w-screen flex min-h-screen flex-col justify-between px-6 lg:px-8">
       <div className="flex justify-between p-4">
         <h1 className="font-bold">talentstark.</h1>
         <ModeToggle />
       </div>
-      <div className="absolute top-1/2 -translate-y-1/2 px-4 lg:left-1/2 lg:max-w-xs lg:-translate-x-1/2 lg:px-0">
-        <Card>
+      <div className="min-w-full">
+        <Card className="mx-auto max-w-sm text-center">
           <CardHeader className="text-center">
             <CardTitle>Jetzt starten</CardTitle>
             <CardDescription>
@@ -93,17 +93,15 @@ const LoginForm = () => {
           </CardContent>
         </Card>
       </div>
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
-        <div className="flex gap-1 text-xs">
-          <Link target="_blank" href={"https://talentstark.de/impressum"}>
-            Impressum
-          </Link>
-          <Link target="_blank" href={"https://talentstark.de/datenschutz"}>
-            Datenschutz
-          </Link>
-        </div>
+      <div className="flex justify-center gap-1 text-xs">
+        <Link target="_blank" href={"https://talentstark.de/impressum"}>
+          Impressum
+        </Link>
+        <Link target="_blank" href={"https://talentstark.de/datenschutz"}>
+          Datenschutz
+        </Link>
       </div>
-    </>
+    </div>
   );
 };
 

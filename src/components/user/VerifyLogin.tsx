@@ -26,7 +26,7 @@ const VerifyLogin = () => {
         <ModeToggle />
       </div>
       <div className="min-w-full">
-        <Card className="mx-auto max-w-md text-center">
+        <Card className="mx-auto max-w-sm text-center">
           <CardHeader>
             <svg
               className="checkmark animateElement"
