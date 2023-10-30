@@ -1,15 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { ModeToggle } from "../DarkModeToggle";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ModeToggle } from "../DarkModeToggle";
 import "../components.css";
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "../ui/card";
 
 const VerifyLogin = () => {
