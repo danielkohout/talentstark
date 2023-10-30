@@ -1,27 +1,34 @@
-import { Button } from "@/components/ui/button";
+import { trpc } from "@/app/_trpc/client";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { JobFieldInterface } from "@/lib/types/job";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
+  const { mutate: generateBriefingAI, isLoading } =
+    trpc.jobRouter.generateBriefingAI.useMutation({
+      onMutate: () => {
+        form.setValue(
+          "briefing",
+          "Wir erstellen gerade dein Briefing... Dies kann kurz dauern... Bitte gedulde dich ein wenig."
+        );
+      },
+      onSuccess: (result) => {
+        if (result?.choices[0].message.content) {
+          form.setValue("briefing", result?.choices[0].message.content);
+        }
+      },
+    });
+
   return (
     <>
       <motion.div
@@ -54,6 +61,25 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
             </FormItem>
           )}
         />
+        <div
+          className={buttonVariants({
+            variant: "default",
+            className: "mt-2 w-full cursor-pointer",
+          })}
+          onClick={() =>
+            generateBriefingAI({
+              prompt: `Erstelle mir eine ansprechende Stellenbeschreibung mit maximal 300 Zeichen für folgenden Beruf: ${form.getValues(
+                "name"
+              )}. Sauber strukturiert mit klaren Absätzen und passenden Überschriften, ansprechend für Bewerber und gern mit Emojis aber nicht zu vielen sondern gut eingesetzt. Lasse jegliche Art von Handlungsaufforderung am Ende weg. Baue keine leeren platzhalter ein und auch keine hashtags.`,
+            })
+          }
+        >
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            "Erstelle mir das Briefing"
+          )}
+        </div>
       </motion.div>
       <Button
         type="button"

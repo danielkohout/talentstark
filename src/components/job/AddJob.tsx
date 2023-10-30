@@ -86,7 +86,7 @@ const AddJob = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className={cn("relative overflow-hidden transition", {
                   "min-h-[13rem]": [0, 1, 2, 3, 4, 7].includes(formStep),
-                  "min-h-[30rem]": [5, 6].includes(formStep),
+                  "min-h-[35rem]": [5, 6].includes(formStep),
                 })}
               >
                 {/* Name */}
