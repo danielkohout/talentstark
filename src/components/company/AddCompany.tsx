@@ -169,7 +169,7 @@ const AddCompany = () => {
                 </motion.div>
                 <motion.div
                   className={cn("left-0 right-0 top-0 space-y-3 p-1", {
-                    // hidden: formStep == 0,
+                    hidden: formStep == 0,
                   })}
                   animate={{
                     translateX: `${100 - formStep * 100}%`,
