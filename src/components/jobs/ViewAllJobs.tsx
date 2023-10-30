@@ -84,7 +84,7 @@ const ViewAllJobs = () => {
                 <p className="text-lg font-bold md:pl-8">Deine Teams</p>
                 <ul className="pt-4 md:pl-4">
                   {teams?.map((team) => (
-                    <li>
+                    <li key={team.id}>
                       <Link
                         href={`/team/${team.id}`}
                         className={buttonVariants({
@@ -100,7 +100,7 @@ const ViewAllJobs = () => {
               <div className="mr-8 md:col-span-8">
                 <ul>
                   {jobs?.map((job) => (
-                    <li>
+                    <li key={job.id}>
                       <Card>
                         <CardHeader>
                           <CardTitle>{job.name}</CardTitle>
