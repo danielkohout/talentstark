@@ -24,21 +24,43 @@ import JobBriefing from "./formFields/JobBriefing";
 import JobBenefits from "./formFields/JobBenefits";
 import { trpc } from "@/app/_trpc/client";
 import JobSaveButton from "./formFields/JobSaveButton";
+import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const AddJob = () => {
-  const { mutate: addJob, isLoading } = trpc.jobRouter.addJob.useMutation();
+  const router = useRouter()
+  const { mutate: addJob, isLoading,  } = trpc.jobRouter.addJob.useMutation({
+    onSuccess: (newJob) => {
+      toast({
+        title: "Dein neuer Job wurde angelegt",
+        description: "Du kannst den Job nun verwalten.",
+      });
+      router.push(`/job/${newJob.id}`)
+    },
+    onError: () => {
+      toast({
+        title: "Etwas ist schief gelaufen...",
+        description: "Bitte versuche es erneut oder wende dich an unser Team",
+        variant: "destructive",
+      });
+    },
+  });
   const [formStep, setFormStep] = useState(0);
   const form = useForm<z.infer<typeof addJobSchema>>({
     resolver: zodResolver(addJobSchema),
     defaultValues: {
       name: "",
+      benefits: "",
+      briefing: "",
+      mail: "",
+      speech: "",
+      team: "",
+      type: "",
     },
   });
-  console.log(form.watch());
-
-  async function onSubmit(values: z.infer<typeof addJobSchema>) {
-    await addJob(values);
-    console.log(values);
+  async function onSubmit(data: z.infer<typeof addJobSchema>) {
+    await addJob(data);
+    console.log(data);
   }
   return (
     <div className="ld:px-8 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-6">
@@ -59,11 +81,10 @@ const AddJob = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    setFormStep(formStep + 1);
                   }
                 }}
                 onSubmit={form.handleSubmit(onSubmit)}
-                className={cn('overflow-hidden relative transition', {
+                className={cn("relative overflow-hidden transition", {
                   "min-h-[13rem]": [0, 1, 2, 3, 4, 7].includes(formStep),
                   "min-h-[30rem]": [5, 6].includes(formStep),
                 })}
@@ -137,7 +158,7 @@ const AddJob = () => {
                   >
                     <ArrowLeft className="ml-2 h-4 w-4" />
                     Zurück
-                  </Button>                
+                  </Button>
                 </div>
               </form>
             </Form>

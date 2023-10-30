@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { privateProcedure, publicProcedure, router } from "../trpc";
 import prisma from "@/lib/db/prisma";
 import { addJobSchema } from "@/validators/job";
+import { privateProcedure, router } from "../trpc";
+import { TRPCError } from "@trpc/server";
 
 export const jobRouter = router({
   getCompanyJobs: privateProcedure.query(async ({ ctx }) => {
@@ -23,9 +23,31 @@ export const jobRouter = router({
     return jobs; // Die gefundenen Jobs zurückgeben
   }),
 
-  addJob: privateProcedure.input(addJobSchema).mutation(async ({ctx, input}) => {
-    console.log('input', input)
-    return "Hallo"
-  })
-
+  addJob: privateProcedure
+    .input(addJobSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { user } = ctx;
+      console.log("input", input);
+      // console.log('user', user)
+      try {
+        const newJob = await prisma.job.create({
+          data: {
+            name: input.name,
+            type: input.type,
+            mail: input.mail,
+            speech: input.speech,
+            briefing: input.briefing,
+            benefits: input.benefits,
+            companyId: user?.companyId,
+            teamId: input.team,
+            userId: user?.id,
+          },
+        });
+        console.log("newJob");
+        return newJob;
+      } catch (error) {
+        console.log("error", error);
+        throw new TRPCError({code: "BAD_REQUEST"})
+      }
+    }),
 });

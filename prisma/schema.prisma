@@ -108,6 +108,11 @@ model Job {
   User        User?         @relation(fields: [userId], references: [id])
   userId      String?
   Application Application[]
+  type        String
+  mail        String
+  speech      String
+  briefing    String
+  benefits    String
 }
 
 model Application {

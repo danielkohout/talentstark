@@ -1,4 +1,4 @@
-import ViewAllJobs from "@/components/jobs/ViewAllJobs";
+import ViewAllJobs from "@/components/job/ViewAllJobs";
 
 const page = () => {
   return <ViewAllJobs />;
