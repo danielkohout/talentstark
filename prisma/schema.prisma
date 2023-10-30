@@ -97,14 +97,22 @@ model UserTeam {
 }
 
 model Job {
-  id        String   @id @default(cuid())
-  name      String
-  companyId String?
-  Team      Team?    @relation(fields: [teamId], references: [id])
-  teamId    String?
-  Company   Company? @relation(fields: [companyId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  id          String        @id @default(cuid())
+  name        String
+  companyId   String?
+  Team        Team?         @relation(fields: [teamId], references: [id])
+  teamId      String?
+  Company     Company?      @relation(fields: [companyId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  User        User?         @relation(fields: [userId], references: [id])
+  userId      String?
+  Application Application[]
+}
+
+model Application {
+  id    String @id @default(cuid())
+  job   Job    @relation(fields: [jobId], references: [id])
+  jobId String
+  data  Json
 }
