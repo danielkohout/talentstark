@@ -2,6 +2,8 @@ import prisma from "@/lib/db/prisma";
 import { addJobSchema } from "@/validators/job";
 import { privateProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import z from "zod";
+import openai from "@/lib/openai";
 
 export const jobRouter = router({
   getCompanyJobs: privateProcedure.query(async ({ ctx }) => {
@@ -47,7 +49,27 @@ export const jobRouter = router({
         return newJob;
       } catch (error) {
         console.log("error", error);
-        throw new TRPCError({code: "BAD_REQUEST"})
+        throw new TRPCError({ code: "BAD_REQUEST" });
+      }
+    }),
+
+  generateBriefingAI: privateProcedure
+    .input(
+      z.object({
+        prompt: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      console.log("input", input);
+      try {
+        const result = await openai.chat.completions.create({
+          messages: [{ role: "user", content: input.prompt }],
+          model: "gpt-3.5-turbo",
+        });
+        console.log("demo", result);
+        return result;
+      } catch (error) {
+        console.log("error: ", error);
       }
     }),
 });

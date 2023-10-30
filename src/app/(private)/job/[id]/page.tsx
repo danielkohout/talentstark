@@ -1,9 +1,8 @@
-import React from 'react'
+import ViewJob from "@/components/job/ViewJob";
+import React from "react";
 
 const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+  return <ViewJob />;
+};
 
-export default page
+export default page;
