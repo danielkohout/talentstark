@@ -51,12 +51,12 @@ const LoginForm = () => {
         <h1 className="font-bold">talentstark.</h1>
         <ModeToggle />
       </div>
-      <div className="absolute left-1/2 top-1/2 max-w-xs -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute top-1/2 -translate-y-1/2 px-4 lg:left-1/2 lg:max-w-xs lg:-translate-x-1/2 lg:px-0">
         <Card>
           <CardHeader className="text-center">
             <CardTitle>Jetzt starten</CardTitle>
             <CardDescription>
-              Du erhältst in wenigen Sekunden eine Mail mit deiner Anmeldung.
+              In wenigen Sekunden erhalätst du eine Mail mit deiner Anmeldung.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -75,7 +75,7 @@ const LoginForm = () => {
                         <Input {...field} />
                       </FormControl>
                       <FormDescription className="text-xs">
-                        Öffne die besätitguns E-Mail auf diesem Gerät.
+                        Öffne die besätitguns E-Mail <br /> auf diesem Gerät.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
