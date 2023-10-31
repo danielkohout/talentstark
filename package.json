@@ -30,6 +30,7 @@
     "@trpc/next": "^10.42.0",
     "@trpc/react-query": "^10.42.0",
     "@trpc/server": "^10.42.0",
+    "ai": "^2.2.20",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",

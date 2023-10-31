@@ -1,5 +1,14 @@
-import { trpc } from "@/app/_trpc/client";
-import { Button, buttonVariants } from "@/components/ui/button";
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import {
   FormControl,
   FormField,
@@ -7,27 +16,25 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { JobFieldInterface } from "@/lib/types/job";
 import { cn } from "@/lib/utils";
+import { useCompletion } from "ai/react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { Label } from "recharts";
 
 const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
-  const { mutate: generateBriefingAI, isLoading } =
-    trpc.jobRouter.generateBriefingAI.useMutation({
-      onMutate: () => {
-        form.setValue(
-          "briefing",
-          "Wir erstellen gerade dein Briefing... Dies kann kurz dauern... Bitte gedulde dich ein wenig."
-        );
-      },
-      onSuccess: (result) => {
-        if (result?.choices[0].message.content) {
-          form.setValue("briefing", result?.choices[0].message.content);
-        }
-      },
-    });
+  const { completion, stop, complete, isLoading } = useCompletion({
+    api: "/api/generateai",
+    onFinish: () => {
+      form.setValue("briefing", completion);
+    },
+  });
+  const prompt = `Erstelle mir eine Stellenbeschreibung für einen ${form.getValues(
+    "name"
+  )}`;
 
   return (
     <>
@@ -43,6 +50,22 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
         }}
       >
         <h2 className="pb-2 font-bold">Bewerber Informationen</h2>
+        {isLoading && (
+          <Dialog defaultOpen={true}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Job Briefing</DialogTitle>
+                <DialogDescription>
+                  Wir erstellen gerade dein Briefing...
+                </DialogDescription>
+              </DialogHeader>
+              {completion}
+              <DialogFooter>
+                <Button onClick={stop}>Abbrechen</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
         <FormField
           control={form.control}
           name="briefing"
@@ -52,6 +75,7 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
               <FormControl>
                 <Textarea
                   className="resize-none"
+                  defaultValue={completion}
                   rows={15}
                   placeholder="Erzähl etwas über die Aufgaben in diesem Job"
                   {...field}
@@ -61,25 +85,15 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
             </FormItem>
           )}
         />
-        <div
-          className={buttonVariants({
-            variant: "default",
-            className: "mt-2 w-full cursor-pointer",
-          })}
-          onClick={() =>
-            generateBriefingAI({
-              prompt: `Erstelle mir eine ansprechende Stellenbeschreibung mit maximal 300 Zeichen für folgenden Beruf: ${form.getValues(
-                "name"
-              )}. Sauber strukturiert mit klaren Absätzen und passenden Überschriften, ansprechend für Bewerber und gern mit Emojis aber nicht zu vielen sondern gut eingesetzt. Lasse jegliche Art von Handlungsaufforderung am Ende weg. Baue keine leeren platzhalter ein und auch keine hashtags.`,
-            })
-          }
+
+        <Button
+          className="mt-2 w-full"
+          disabled={isLoading}
+          type="button"
+          onClick={() => complete(prompt)}
         >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            "Erstelle mir das Briefing"
-          )}
-        </div>
+          Erstelle die Beschreibung für mich
+        </Button>
       </motion.div>
       <Button
         type="button"
