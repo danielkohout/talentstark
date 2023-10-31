@@ -53,23 +53,41 @@ export const jobRouter = router({
       }
     }),
 
-  generateBriefingAI: privateProcedure
+  getJobDetails: privateProcedure
     .input(
       z.object({
-        prompt: z.string(),
+        id: z.string(),
       })
     )
-    .mutation(async ({ input }) => {
-      console.log("input", input);
-      try {
-        const result = await openai.chat.completions.create({
-          messages: [{ role: "user", content: input.prompt }],
-          model: "gpt-3.5-turbo",
+    .query(async ({ ctx, input }) => {
+      const user = ctx.user;
+      const userCompany = await prisma.user.findFirst({
+        where: {
+          id: user?.id,
+        },
+        include: {
+          company: true,
+        },
+      });
+      console.log("userCompany", userCompany?.company);
+      const job = await prisma.job.findFirst({
+        where: {
+          id: input.id,
+          companyId: userCompany?.companyId,
+        },
+        include: {
+          Team: true,
+          Application: true,
+          Company: true,
+          User: true,
+        },
+      });
+      if (!job) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Keine Berechtigung",
         });
-        console.log("demo", result);
-        return result;
-      } catch (error) {
-        console.log("error: ", error);
       }
+      return job;
     }),
 });

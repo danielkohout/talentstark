@@ -111,8 +111,8 @@ model Job {
   type        String
   mail        String
   speech      String
-  briefing    String
-  benefits    String
+  briefing    String @db.VarChar(800)
+  benefits    String @db.VarChar(800)
 }
 
 model Application {

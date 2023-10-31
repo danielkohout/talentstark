@@ -135,7 +135,7 @@ const AddCompany = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit((data) => addCompany(data))}
-                className="relative space-y-3 overflow-x-hidden"
+                className="relative h-[26rem] space-y-3 overflow-x-hidden"
               >
                 <motion.div
                   className={cn("absolute left-0 right-0 top-0 space-y-3 p-1", {
@@ -259,7 +259,7 @@ const AddCompany = () => {
                   />
                 </motion.div>
 
-                <div className="flex items-center gap-2 pt-8">
+                <div className="absolute bottom-0 left-0 flex items-center gap-2 pt-8">
                   <Button
                     type="button"
                     variant={"ghost"}

@@ -22,7 +22,7 @@ const JobBenefits = ({ formStep, setFormStep, form }: JobFieldInterface) => {
       setGenereatedBenefits(1);
     },
   });
-  const prompt = `Erstelle mir für Bewerber ansprechende Benefits für den Beruf
+  const prompt = `Erstelle mir für Bewerber ansprechende Benefits (maximal 200 Wörter) für den Beruf
   ${form.getValues("speech")}.
   Verfassen den Text in ${form.getValues("speech")} Form.
   Verwende passende Emojis.
