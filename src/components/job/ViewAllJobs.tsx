@@ -98,60 +98,66 @@ const ViewAllJobs = () => {
                 </ul>
               </div>
               <div className="mr-8 md:col-span-8">
-                <ul>
-                  {jobs?.map((job) => (
-                    <li key={job.id}>
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>{job.name}</CardTitle>
-                          <CardDescription>{job.Team?.name}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                          <div className="rounded-lg border p-4">
-                            <ResponsiveContainer width="100%" height={150}>
-                              <LineChart data={data}>
-                                <Line
-                                  type="natural"
-                                  dataKey="uv"
-                                  stroke="#2563eb"
-                                  strokeWidth={2}
-                                />
-                                <Tooltip />
-                              </LineChart>
-                            </ResponsiveContainer>
-                            <p className="text-right text-xs">Job Aufrufe</p>
-                          </div>
-                          <div className="rounded-lg border p-4">
-                            <ResponsiveContainer width="100%" height={150}>
-                              <LineChart data={data}>
-                                <Line
-                                  type="natural"
-                                  dataKey="uv"
-                                  stroke="#2563eb"
-                                  strokeWidth={2}
-                                />
-                                <Tooltip />
-                              </LineChart>
-                            </ResponsiveContainer>
-                            <p className="text-right text-xs">Bewerbungen</p>
-                          </div>
-                        </CardContent>
-                        <CardFooter className="flex w-full justify-between">
-                          <p className="block">
-                            <b>Bewerbungen</b>: 2
-                          </p>
-                          <Link
-                            className={buttonVariants({
-                              variant: "default",
-                            })}
-                            href={`/job/${job.id}`}
-                          >
-                            Bewerbungen ansehen
-                          </Link>
-                        </CardFooter>
-                      </Card>
-                    </li>
-                  ))}
+                <ul className="space-y-8">
+                  {jobs
+                    ?.sort(
+                      (a, b) =>
+                        new Date(b.updatedAt).getTime() -
+                        new Date(a.updatedAt).getTime()
+                    )
+                    .map((job) => (
+                      <li key={job.id}>
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>{job.name}</CardTitle>
+                            <CardDescription>{job.Team?.name}</CardDescription>
+                          </CardHeader>
+                          <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                            <div className="rounded-lg border p-4">
+                              <ResponsiveContainer width="100%" height={150}>
+                                <LineChart data={data}>
+                                  <Line
+                                    type="natural"
+                                    dataKey="uv"
+                                    stroke="#2563eb"
+                                    strokeWidth={2}
+                                  />
+                                  <Tooltip />
+                                </LineChart>
+                              </ResponsiveContainer>
+                              <p className="text-right text-xs">Job Aufrufe</p>
+                            </div>
+                            <div className="rounded-lg border p-4">
+                              <ResponsiveContainer width="100%" height={150}>
+                                <LineChart data={data}>
+                                  <Line
+                                    type="natural"
+                                    dataKey="uv"
+                                    stroke="#2563eb"
+                                    strokeWidth={2}
+                                  />
+                                  <Tooltip />
+                                </LineChart>
+                              </ResponsiveContainer>
+                              <p className="text-right text-xs">Bewerbungen</p>
+                            </div>
+                          </CardContent>
+                          <CardFooter className="flex w-full justify-between">
+                            <p className="block">
+                              <b>Bewerbungen</b>: 2
+                            </p>
+                            <Link
+                              className={buttonVariants({
+                                variant: "default",
+                              })}
+                              href={`/job/${job.id}`}
+                            >
+                              Bewerbungen ansehen
+                            </Link>
+                          </CardFooter>
+                        </Card>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </div>
