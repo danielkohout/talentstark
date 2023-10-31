@@ -85,7 +85,7 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
             onClick={() => complete(prompt)}
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               "Erstelle die Beschreibung für mich"
             )}
