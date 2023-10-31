@@ -41,10 +41,7 @@ const JobMail = ({ formStep, setFormStep, form }: JobFieldInterface) => {
             <FormItem>
               <FormLabel>Mail</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="bewerbung@unternehmen.de"
-                  {...field}
-                />
+                <Input placeholder="bewerbung@unternehmen.de" {...field} />
               </FormControl>
               <FormDescription>
                 An welche E-Mail sollen Bewerbungen und Informationen über
@@ -62,10 +59,13 @@ const JobMail = ({ formStep, setFormStep, form }: JobFieldInterface) => {
           hidden: formStep != 3,
         })}
         onClick={() => {
-              form.trigger(["mail"]);
-              const nameState = form.getFieldState("mail");
-              if (!nameState.isDirty || nameState.invalid) return;
-              setFormStep(formStep + 1);
+          form.trigger(["mail"]);
+          const nameState = form.getFieldState("mail");
+          if (!nameState.isDirty || nameState.invalid) return;
+          if (!nameState.invalid) {
+            form.trigger(["mail"]);
+            setFormStep(formStep + 1);
+          }
         }}
       >
         Weiter

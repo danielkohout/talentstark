@@ -1,4 +1,5 @@
 import { trpc } from "@/app/_trpc/client";
+import AddTeam from "@/components/team/AddTeam";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
