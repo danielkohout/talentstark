@@ -49,9 +49,7 @@ const AddJob = () => {
   const form = useForm<z.infer<typeof addJobSchema>>({
     resolver: zodResolver(addJobSchema),
     defaultValues: {
-      name: "",
-      benefits: "",
-      briefing: "",
+      name: "",   
       mail: "",
       speech: "",
       team: "",
