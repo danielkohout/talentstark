@@ -20,25 +20,27 @@ import { JobFieldInterface } from "@/lib/types/job";
 import { cn } from "@/lib/utils";
 import { useCompletion } from "ai/react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
-  const [generatedBriefing, setGeneratedBriefing] = useState("");
+  const [generatedBriefing, setGeneratedBriefing] = useState(0);
   const { completion, stop, complete, isLoading } = useCompletion({
-    api: "/api/generateai",   
+    api: "/api/generateai",
     onFinish: async () => {
-      setGeneratedBriefing(completion);    
+      setGeneratedBriefing(1);
     },
   });
-  const prompt = `Erstelle mir eine Stellenbeschreibung für einen ${form.getValues(
+  const prompt = `Erstelle mir eine für Bewerber ansprechende Stellenbeschreibung in ${form.getValues(
+    "speech"
+  )} Form! Mit maximal 100 Wörtern für einen ${form.getValues(
     "name"
-  )}`;
+  )}. Füge einige klassische Aufgaben für diesen Beruf ein. Gib mir eine sauber strukturierte Antwort zurück. Beginne direkt und füge keine Überschrift ein.`;
   // console.log(form.watch());
 
   useEffect(() => {
     console.log("Änderung");
-    form.setValue('briefing', completion)
+    form.setValue("briefing", completion);
   }, [completion]);
 
   return (
@@ -54,7 +56,7 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
           ease: "easeInOut",
         }}
       >
-        <h2 className="pb-2 font-bold">Bewerber Informationen</h2>       
+        <h2 className="pb-2 font-bold">Bewerber Informationen</h2>
         <FormField
           control={form.control}
           name="briefing"
@@ -75,14 +77,18 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
             </FormItem>
           )}
         />
-        {!generatedBriefing && (
+        {generatedBriefing === 0 && (
           <Button
             className="mt-2 w-full"
             disabled={isLoading}
             type="button"
             onClick={() => complete(prompt)}
           >
-            Erstelle die Beschreibung für mich
+            {isLoading ? (
+              <Loader2 className="h-4 w-4" />
+            ) : (
+              "Erstelle die Beschreibung für mich"
+            )}
           </Button>
         )}
       </motion.div>
