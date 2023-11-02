@@ -13,6 +13,8 @@ import { Skeleton } from "../ui/skeleton";
 import { buttonVariants } from "../ui/button";
 import EditTeam from "./EditTeam";
 import { trpc } from "@/app/_trpc/client";
+import { Eye } from "lucide-react";
+import TeamJobs from "./TeamJobs";
 
 interface TeamProps {
   params: {
@@ -26,7 +28,7 @@ const Team = ({ params }: TeamProps) => {
       <div className="border-b ">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-8 md:px-8">
           <h1 className="flex items-center gap-2 text-xl font-bold md:text-2xl">
-            {team?.team ? team.team.name : <Skeleton className="h-6 w-40" />}
+            {team?.name ? team.name : <Skeleton className="h-6 w-40" />}
             <EditTeam id={params.id} />
           </h1>
           <Link
@@ -35,6 +37,7 @@ const Team = ({ params }: TeamProps) => {
             })}
             href={"/"}
           >
+            <Eye className="w4 h4 mr-2" />
             Teamseite
           </Link>
         </div>
@@ -47,7 +50,9 @@ const Team = ({ params }: TeamProps) => {
               <CardDescription>Jobs zu diesem Team</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold lg:text-3xl">8</p>
+              <p className="text-2xl font-bold lg:text-3xl">
+                {team?.jobs.length}
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -56,7 +61,9 @@ const Team = ({ params }: TeamProps) => {
               <CardDescription>Bewerbung zu diesem Team</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold lg:text-3xl">211</p>
+              <p className="text-2xl font-bold lg:text-3xl">
+                {team?.applications.length}
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -67,15 +74,21 @@ const Team = ({ params }: TeamProps) => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold lg:text-3xl">8.52/10</p>
+              <p className="text-xl font-bold lg:text-xl">Bald verfügbar</p>
             </CardContent>
           </Card>
         </div>
         <div className="mt-8">
           <h2 className="flex items-center gap-2 text-2xl font-bold">
-            Jobs für{" "}
-            {team?.team ? team.team.name : <Skeleton className="h-6 w-60" />}
+            Jobs im {team ? team.name : <Skeleton className="h-6 w-60" />}-Team
           </h2>
+          <div className="mt-8">
+            {!team?.jobs ? (
+              <Skeleton className="h-20 w-full" />
+            ) : (
+              <TeamJobs params={params} />
+            )}
+          </div>
         </div>
       </div>
     </>

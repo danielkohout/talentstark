@@ -26,6 +26,8 @@ import * as z from "zod";
 import { Skeleton } from "../ui/skeleton";
 import { toast } from "../ui/use-toast";
 import { useEffect } from "react";
+import { Textarea } from "../ui/textarea";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface TeamProps {
   id: string;
@@ -59,11 +61,42 @@ const EditTeam = ({ id }: TeamProps) => {
   console.log(form.watch());
   useEffect(() => {
     const setInitalValues = async () => {
-      form.setValue("id", team?.team.id as string);
-      form.setValue("name", team?.team.name as string);
+      form.setValue("id", team?.id as string);
+      form.setValue("name", team?.name as string);
+      form.setValue("contactFirstName", team?.contactFirstName as string);
+      form.setValue("contactLastName", team?.contactLastName as string);
+      form.setValue("street", team?.street as string);
+      form.setValue("postcode", team?.postCode as string);
+      form.setValue("city", team?.city as string);
+      form.setValue("description", team?.description as string);
     };
     setInitalValues();
-  }, [team?.team]);
+  }, [team]);
+
+  const watchedPostcode = form.watch().postcode;
+  useEffect(() => {
+    const teamCityFromApi = async () => {
+      try {
+        const response = await fetch(
+          `https://openplzapi.org/de/Localities?postalCode=${watchedPostcode}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched data:", data[0].name);
+          form.setValue("city", data[0].name);
+        } else {
+          console.log("Failed to fetch data:", response.status);
+        }
+      } catch (error) {
+        console.log("An error occurred:", error);
+      }
+    };
+
+    if (watchedPostcode) {
+      // Nur ausführen, wenn eine Postleitzahl vorhanden ist
+      teamCityFromApi();
+    }
+  }, [watchedPostcode]); // Abhängigkeitsliste aktualisiert
 
   return (
     <Sheet>
@@ -72,14 +105,14 @@ const EditTeam = ({ id }: TeamProps) => {
           <Settings className="h-4 w-4" />
         </div>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>{team?.team.name}</SheetTitle>
+          <SheetTitle>{team?.name}</SheetTitle>
         </SheetHeader>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit((data) => editTeamName(data))}
-            className="mt-8 space-y-3"
+            className="mt-8 space-y-3 p-1"
           >
             <FormField
               control={form.control}
@@ -88,11 +121,93 @@ const EditTeam = ({ id }: TeamProps) => {
                 <FormItem>
                   <FormLabel>Teamname</FormLabel>
                   <FormControl>
-                    {team?.team.name ? (
+                    {team?.name ? (
                       <Input {...field} />
                     ) : (
                       <Skeleton className="h-10 w-full" />
                     )}
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contactFirstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ansprechpartner Vorname</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Vorname" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contactLastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ansprechpartner Nachname</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nachname" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="street"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Straße und Hausnummer</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Wo sitzt dieses Team?" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="postcode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Postleitzahl</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Gib eine Postleitzahl ein" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Stadt</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Gib eine Stadt ein" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Beschreibung</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Erzähl etwas über dieses Team"
+                      className="resize-none"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
