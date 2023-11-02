@@ -1,21 +1,21 @@
 "use client";
-import { useCompletion } from "ai/react";
-import { Input } from "../ui/input";
-import { Button, buttonVariants } from "../ui/button";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { trpc } from "@/app/_trpc/client";
+import { makeUrlFriendly } from "@/lib/urlFriendlyName";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import AccessDenied from "../AccessDenied";
+import { buttonVariants } from "../ui/button";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "../ui/card";
-import AccessDenied from "../AccessDenied";
-import { makeUrlFriendly } from "@/lib/urlFriendlyName";
 import { Skeleton } from "../ui/skeleton";
+import Applications from "./Applications";
+
 interface JobParams {
   params: {
     id: string;
@@ -74,20 +74,21 @@ const ViewJob = ({ params }: JobParams) => {
             <p>Bewerber ansehen</p>
           </CardFooter>
         </Card>
-      </div>
-      <div className="mx-auto grid max-w-7xl px-6 py-8  md:px-8">
-        <Card>
+        <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle>Bewerbungen</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>Statistiken</CardTitle>
+            <CardDescription>So performt dein Job</CardDescription>
           </CardHeader>
           <CardContent>
-            <p>{job.briefing}</p>
+            <p>{job.Application.length}</p>
           </CardContent>
           <CardFooter>
             <p>Bewerber ansehen</p>
           </CardFooter>
         </Card>
+      </div>
+      <div className="mx-auto max-w-7xl px-6 py-8 md:px-8">
+        <Applications />
       </div>
     </div>
   );

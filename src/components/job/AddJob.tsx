@@ -28,14 +28,14 @@ import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 
 const AddJob = () => {
-  const router = useRouter()
-  const { mutate: addJob, isLoading,  } = trpc.jobRouter.addJob.useMutation({
+  const router = useRouter();
+  const { mutate: addJob, isLoading } = trpc.jobRouter.addJob.useMutation({
     onSuccess: (newJob) => {
       toast({
         title: "Dein neuer Job wurde angelegt",
         description: "Du kannst den Job nun verwalten.",
       });
-      router.push(`/job/${newJob.id}`)
+      router.push(`/job/${newJob.jobId}`);
     },
     onError: () => {
       toast({
@@ -49,7 +49,7 @@ const AddJob = () => {
   const form = useForm<z.infer<typeof addJobSchema>>({
     resolver: zodResolver(addJobSchema),
     defaultValues: {
-      name: "",   
+      name: "",
       mail: "",
       speech: "",
       team: "",

@@ -71,7 +71,6 @@ model User {
   company       Company?   @relation(fields: [companyId], references: [id])
   companyId     String?
   teams         UserTeam[]
-  jobs          Job[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 }
@@ -112,7 +111,6 @@ model Job {
   Company     Company?      @relation(fields: [companyId], references: [id])
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  User        User?         @relation(fields: [userId], references: [id])
   userId      String?
   Application Application[]
   type        String

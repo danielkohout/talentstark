@@ -1,9 +1,8 @@
 import prisma from "@/lib/db/prisma";
 import { addJobSchema } from "@/validators/job";
-import { privateProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
-import openai from "@/lib/openai";
+import { privateProcedure, router } from "../trpc";
 
 export const jobRouter = router({
   getCompanyJobs: privateProcedure.query(async ({ ctx }) => {
@@ -29,9 +28,12 @@ export const jobRouter = router({
     .input(addJobSchema)
     .mutation(async ({ ctx, input }) => {
       const { user } = ctx;
-      console.log("input", input);
+      // console.log("input", input);
       // console.log('user', user)
       try {
+        if (!ctx.user?.id) {
+          throw new Error("User ID nicht vorhanden");
+        }
         const newJob = await prisma.job.create({
           data: {
             name: input.name,
@@ -45,7 +47,6 @@ export const jobRouter = router({
             userId: user?.id,
           },
         });
-        console.log("newJob");
         return newJob;
       } catch (error) {
         console.log("error", error);
@@ -79,7 +80,6 @@ export const jobRouter = router({
           Team: true,
           Application: true,
           Company: true,
-          User: true,
         },
       });
       if (!job) {
@@ -91,5 +91,46 @@ export const jobRouter = router({
       return job;
     }),
 
-    
+  getJobs: privateProcedure.query(async ({ ctx }) => {
+    if (!ctx.user?.id) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+    const jobs = await prisma.job.findMany({
+      where: {
+        Team: {
+          users: {
+            some: {
+              userId: ctx.user.id,
+            },
+          },
+        },
+      },
+      include: {
+        Application: true,
+        Team: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+    return jobs;
+  }),
+
+  getJob: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      try {
+        return await prisma.job.findUnique({
+          where: {
+            id: input.id,
+          },
+          include: {
+            Team: true,
+            Company: true,
+          },
+        });
+      } catch (err) {
+        throw new TRPCError({ code: "BAD_REQUEST", cause: err });
+      }
+    }),
 });

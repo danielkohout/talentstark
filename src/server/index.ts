@@ -7,6 +7,7 @@ import { jobRouter } from "./job/job";
 import { userRouter } from "./user/user";
 import { companyRouter } from "./company/company";
 import { teamRouter } from "./team/team";
+import { applicationRouter } from "./application/application";
 export const appRouter = router({
   deleteJob: privateProcedure
     .input(z.object({ id: z.string() }))
@@ -33,6 +34,7 @@ export const appRouter = router({
   userRouter,
   companyRouter,
   teamRouter,
+  applicationRouter,
   getTodos: publicProcedure.query(async () => {
     return [10, 20, 30];
   }),

@@ -61,12 +61,13 @@ export const teamRouter = router({
             },
           },
         });
-        return await prisma.userTeam.create({
+        const newUserTeam = await prisma.userTeam.create({
           data: {
             userId: user?.id!,
             teamId: newTeam.id,
           },
         });
+        return newUserTeam;
       } catch (err) {
         console.log("err", err);
       }
@@ -125,10 +126,10 @@ export const teamRouter = router({
           teamId: userTeam.team.id,
         },
         include: {
-          Application: true,          
+          Application: true,
         },
       });
-   
+
       return jobs;
     }),
 });
