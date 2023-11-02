@@ -77,14 +77,20 @@ model User {
 }
 
 model Team {
-  id        String     @id @default(cuid())
-  name      String
-  jobs      Job[]
-  users     UserTeam[]
-  Company   Company?   @relation(fields: [companyId], references: [id])
-  companyId String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id               String     @id @default(cuid())
+  name             String
+  street           String
+  city             String
+  postCode         String
+  contactFirstName String
+  contactLastName  String
+  description      String
+  jobs             Job[]
+  users            UserTeam[]
+  Company          Company?   @relation(fields: [companyId], references: [id])
+  companyId        String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }
 
 model UserTeam {
@@ -111,8 +117,8 @@ model Job {
   type        String
   mail        String
   speech      String
-  briefing    String @db.VarChar(800)
-  benefits    String @db.VarChar(800)
+  briefing    String        @db.VarChar(800)
+  benefits    String        @db.VarChar(800)
 }
 
 model Application {

@@ -2,7 +2,7 @@ import prisma from "@/lib/db/prisma";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
 import { editCompanySchema } from "@/validators/company";
-import { editTeamSchema } from "@/validators/team";
+import { addTeamSchema, editTeamSchema } from "@/validators/team";
 import { TRPCError } from "@trpc/server";
 import { redirect } from "next/navigation";
 
@@ -36,30 +36,36 @@ export const teamRouter = router({
       return team;
     }),
   addTeam: privateProcedure
-    .input(
-      z.object({
-        name: z.string(),
-      })
-    )
+    .input(addTeamSchema)
     .mutation(async ({ input, ctx }) => {
-      const name = input.name;
       const { user } = ctx;
-      const newTeam = await prisma.team.create({
-        data: {
-          name: name,
-          Company: {
-            connect: {
-              id: user?.companyId!,
+      console.log("input", input);
+      try {
+        const newTeam = await prisma.team.create({
+          data: {
+            name: input.name,
+            city: input.city,
+            contactFirstName: input.contactFirstName,
+            contactLastName: input.contactLastName,
+            postCode: input.postcode,
+            street: input.street,
+            description: input.description,
+            Company: {
+              connect: {
+                id: user?.companyId!,
+              },
             },
           },
-        },
-      });
-      return await prisma.userTeam.create({
-        data: {
-          userId: user?.id!,
-          teamId: newTeam.id,
-        },
-      });
+        });
+        return await prisma.userTeam.create({
+          data: {
+            userId: user?.id!,
+            teamId: newTeam.id,
+          },
+        });
+      } catch (err) {
+        console.log("err", err);
+      }
     }),
 
   editTeam: privateProcedure

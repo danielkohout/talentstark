@@ -32,6 +32,8 @@ import { useRouter } from "next/navigation";
 import { Badge } from "../ui/badge";
 import { Progress } from "../ui/progress";
 import { toast } from "../ui/use-toast";
+import { useEffect } from "react";
+import { Textarea } from "../ui/textarea";
 type Input = z.infer<typeof addTeamSchema>;
 
 const TeamSetup = () => {
@@ -55,6 +57,32 @@ const TeamSetup = () => {
       name: "",
     },
   });
+
+  const watchedPostcode = form.watch().postcode;
+  useEffect(() => {
+    const teamCityFromApi = async () => {
+      try {
+        const response = await fetch(
+          `https://openplzapi.org/de/Localities?postalCode=${watchedPostcode}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched data:", data[0].name);
+          form.setValue("city", data[0].name);
+        } else {
+          console.log("Failed to fetch data:", response.status);
+        }
+      } catch (error) {
+        console.log("An error occurred:", error);
+      }
+    };
+
+    if (watchedPostcode) {
+      // Nur ausführen, wenn eine Postleitzahl vorhanden ist
+      teamCityFromApi();
+    }
+  }, [watchedPostcode]); // Abhängigkeitsliste aktualisiert
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
       <div className="mx-auto flex max-w-sm flex-col items-center">
@@ -101,6 +129,92 @@ const TeamSetup = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="contactFirstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ansprechpartner Vorname</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Vorname" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contactLastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ansprechpartner Nachname</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nachname" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="street"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Straße und Hausnummer</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Wo sitzt dieses Team?" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="postcode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Postleitzahl</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Gib eine Postleitzahl ein"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Stadt</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Gib eine Stadt ein" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Beschreibung</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Erzähl etwas über dieses Team"
+                          className="resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <Alert>
                   <Store className="h-4 w-4" />
                   <AlertTitle>
