@@ -28,7 +28,7 @@ const TeamJobs = ({ params }: TeamJobsProps) => {
       {jobs ? (
         <div>
           {jobs.map((job) => (
-            <Card>
+            <Card key={job.id}>
               <CardHeader>
                 <CardTitle>{job.name}</CardTitle>
                 <CardDescription>
