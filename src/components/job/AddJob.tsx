@@ -35,7 +35,7 @@ const AddJob = () => {
         title: "Dein neuer Job wurde angelegt",
         description: "Du kannst den Job nun verwalten.",
       });
-      router.push(`/job/${newJob.jobId}`);
+      router.push(`/job/${newJob.id}`);
     },
     onError: () => {
       toast({

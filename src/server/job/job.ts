@@ -95,7 +95,7 @@ export const jobRouter = router({
     if (!ctx.user?.id) {
       throw new TRPCError({ code: "FORBIDDEN" });
     }
-    const jobs = await prisma.job.findMany({
+    return await prisma.job.findMany({
       where: {
         Team: {
           users: {
@@ -113,22 +113,38 @@ export const jobRouter = router({
         updatedAt: "desc",
       },
     });
-    return jobs;
   }),
 
   getJob: privateProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!ctx.user?.id) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
+
       try {
-        return await prisma.job.findUnique({
+        const job = await prisma.job.findUnique({
           where: {
             id: input.id,
+            Team: {
+              users: {
+                some: {
+                  userId: ctx.user.id,
+                },
+              },
+            },
           },
           include: {
             Team: true,
             Company: true,
           },
         });
+
+        if (!job) {
+          throw new TRPCError({ code: "NOT_FOUND" });
+        }
+
+        return job;
       } catch (err) {
         throw new TRPCError({ code: "BAD_REQUEST", cause: err });
       }
