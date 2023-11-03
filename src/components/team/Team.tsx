@@ -57,12 +57,13 @@ const Team = ({ params }: TeamProps) => {
           {team?.slug ? (
             <div className="flex items-center gap-2">
               <Link
+                target="_blank"
                 className={buttonVariants({
                   variant: "ghost",
                 })}
                 href={`/${team.slug}`}
               >
-                <Eye className="w-4 h-4 mr-2" />
+                <Eye className="mr-2 h-4 w-4" />
                 Teamseite
               </Link>
               <TeamLink params={params} />
@@ -133,7 +134,7 @@ const Team = ({ params }: TeamProps) => {
           </Card>
         </div>
         <div className="mt-8">
-          <h2 className="flex items-center gap-2 text-2xl font-bold">
+          <h2 className="flex items-center gap-2 text-xl font-bold">
             Jobs im {team ? team.name : <Skeleton className="h-6 w-60" />}-Team
           </h2>
           <div className="mt-8">
