@@ -132,7 +132,7 @@ const TeamOverview = () => {
                               nur löschen, wenn du vorher den Job löschst.
                               <ul>
                                 {team.jobs.map((job) => (
-                                  <li className="mt-2 font-bold">
+                                  <li key={job.id} className="mt-2 font-bold">
                                     <Link href={`/job/${job.id}`}>
                                       {job.name}
                                     </Link>
