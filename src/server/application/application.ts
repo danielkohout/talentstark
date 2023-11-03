@@ -1,9 +1,7 @@
 import prisma from "@/lib/db/prisma";
-import { addJobSchema } from "@/validators/job";
-import { privateProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
-import openai from "@/lib/openai";
+import { privateProcedure, router } from "../trpc";
 
 export const applicationRouter = router({
   getApplications: privateProcedure
@@ -26,7 +24,7 @@ export const applicationRouter = router({
             where: {
               users: {
                 some: {
-                  userId: ctx.user.id,
+                  id: ctx.user.id,
                 },
               },
             },
