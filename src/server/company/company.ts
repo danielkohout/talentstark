@@ -29,6 +29,9 @@ export const companyRouter = router({
       where: {
         id: user?.companyId!,
       },
+      include: {
+        teams: true,
+      },
     });
   }),
   editCompany: privateProcedure

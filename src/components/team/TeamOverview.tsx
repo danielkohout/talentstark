@@ -24,6 +24,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Skeleton } from "../ui/skeleton";
+import { badgeVariants } from "../ui/badge";
 
 const TeamOverview = () => {
   const utils = trpc.useUtils();
@@ -31,15 +33,34 @@ const TeamOverview = () => {
   const { mutate: deleteTeam } = trpc.teamRouter.deleteTeam.useMutation({
     onSuccess: () => {
       utils.teamRouter.invalidate();
+      utils.companyRouter.invalidate();
     },
   });
+  const { data: company } = trpc.companyRouter.getCompany.useQuery();
   return (
     <>
-      <div className="">
-        <div className="border-b ">
-          <h1 className="mx-auto max-w-7xl px-6 py-8 text-xl font-bold md:px-8 md:text-2xl">
-            Teams
-          </h1>
+      <div className="w-full">
+        <div className="border-b">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-8 md:px-8">
+            <h1 className=" text-xl font-bold md:text-2xl">Teams</h1>
+            <div>
+              {company?.subscription === 0 ? (
+                <div>0</div>
+              ) : (
+                <div>
+                  {company?.teams ? (
+                    <div className={badgeVariants({ variant: "outline" })}>
+                      <div>
+                        Freie Teams: {2 - (company?.teams?.length ?? 0)}
+                      </div>
+                    </div>
+                  ) : (
+                    <Skeleton className="h-6 w-10" />
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 md:grid-cols-12">
           <div className="mt-8 md:col-span-4">
