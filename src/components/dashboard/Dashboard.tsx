@@ -20,7 +20,7 @@ const Dashboard = () => {
     redirect("/user");
   }
   const { data: jobs, isLoading: jobLoading } =
-    trpc.jobRouter.getCompanyJobs.useQuery();
+    trpc.jobRouter.getJobs.useQuery();
 
   useEffect(() => {
     if (!jobLoading && jobs) {
@@ -94,7 +94,7 @@ const Dashboard = () => {
                   <div className="divide-y divide-gray-200 rounded-lg border bg-white shadow-sm dark:bg-transparent">
                     <div className="p-6">
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Gehört zu: {job.Company?.name} / {job.Team?.name}
+                        Gehört zu: {job.Team?.name}
                       </p>
                       <h3 className="mt-1 text-2xl font-bold">{job.name}</h3>
                       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -142,7 +142,7 @@ const Dashboard = () => {
               Lege jetzt deinen ersten Job an.
             </p>
             <Link
-              href={"/"}
+              href={"/job/add"}
               className={buttonVariants({
                 size: "lg",
                 variant: "outline",
