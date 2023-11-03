@@ -90,6 +90,7 @@ model Team {
   Company          Company?      @relation(fields: [companyId], references: [id])
   companyId        String?
   applications     Application[]
+  slug             String?       @unique
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 }

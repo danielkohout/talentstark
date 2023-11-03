@@ -1,5 +1,5 @@
 import prisma from "@/lib/db/prisma";
-import { addTeamSchema, editTeamSchema } from "@/validators/team";
+import { addTeamSchema, editTeamSchema, updateLink } from "@/validators/team";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { privateProcedure, router } from "../trpc";
@@ -184,5 +184,28 @@ export const teamRouter = router({
           },
         },
       });
+    }),
+
+  updateTeamSlug: privateProcedure
+    .input(updateLink)
+    .mutation(async ({ ctx, input }) => {
+      console.log("input", input);
+      try {
+        const updatedTeam = await prisma.team.update({
+          where: {
+            id: input.id,
+            users: {
+              some: {
+                id: ctx.user?.id,
+              },
+            },
+          },
+          data: {
+            slug: input.link,
+          },
+        });
+      } catch (err) {
+        console.log("err", err);
+      }
     }),
 });

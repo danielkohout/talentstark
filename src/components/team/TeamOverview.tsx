@@ -25,7 +25,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Skeleton } from "../ui/skeleton";
-import { badgeVariants } from "../ui/badge";
+import { Badge, badgeVariants } from "../ui/badge";
 
 const TeamOverview = () => {
   const utils = trpc.useUtils();
@@ -45,14 +45,16 @@ const TeamOverview = () => {
             <h1 className=" text-xl font-bold md:text-2xl">Teams</h1>
             <div>
               {company?.subscription === 0 ? (
-                <div>0</div>
+                <div>
+                  <Badge variant="destructive">
+                    Kein gültiges Abo vorhanden
+                  </Badge>
+                </div>
               ) : (
                 <div>
                   {company?.teams ? (
                     <div className={badgeVariants({ variant: "outline" })}>
-                      <div>
-                        Freie Teams: {2 - (company?.teams?.length ?? 0)}
-                      </div>
+                      <div>Teams: {company?.teams?.length ?? 0}/2</div>
                     </div>
                   ) : (
                     <Skeleton className="h-6 w-10" />

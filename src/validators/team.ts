@@ -26,3 +26,16 @@ export const editTeamSchema = z.object({
   contactLastName: z.string(),
   description: z.string(),
 });
+
+export const updateLink = z.object({
+  link: z
+    .string()
+    .min(5, "Bitte gib einen Link ein von mindestens fünf Zeichen ein")
+    .max(255, "Dein Link ist zu lang")
+    .refine((link) => /^[a-zA-Z0-9-]+$/g.test(link), {
+      message:
+        "Der Link darf keine Leerzeichen, Sonderzeichen, Umlaute oder andere unzulässige Zeichen enthalten",
+      path: [], // path is an empty array as it refers to the value itself
+    }),
+  id: z.string(),
+});
