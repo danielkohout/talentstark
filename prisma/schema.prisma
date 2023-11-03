@@ -109,6 +109,7 @@ model Job {
   type        String
   mail        String
   speech      String
+  slug        String?       @unique
   briefing    String        @db.VarChar(800)
   benefits    String        @db.VarChar(800)
 }

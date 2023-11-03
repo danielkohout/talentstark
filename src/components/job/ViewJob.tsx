@@ -23,7 +23,7 @@ interface JobParams {
 }
 
 const ViewJob = ({ params }: JobParams) => {
-  const { data: job, isLoading } = trpc.jobRouter.getJobDetails.useQuery({
+  const { data: job, isLoading } = trpc.jobRouter.getJob.useQuery({
     id: params.id,
   });
 
@@ -34,12 +34,9 @@ const ViewJob = ({ params }: JobParams) => {
       </div>
     );
   }
-
   if (!job) {
     return <AccessDenied />;
   }
-
-  const companyLink = makeUrlFriendly(job.Company?.name);
 
   return (
     <div>
@@ -51,7 +48,9 @@ const ViewJob = ({ params }: JobParams) => {
             {job.Team?.name}
           </h1>
           <Link
-            href={`/${companyLink}`}
+            href={`/${job.Team?.slug ? job.Team?.slug : job.Team?.id}/${
+              job.slug ? job.slug : job.id
+            }`}
             className={buttonVariants({
               variant: "outline",
             })}
@@ -68,9 +67,7 @@ const ViewJob = ({ params }: JobParams) => {
             <CardTitle>Bewerbungen</CardTitle>
             <CardDescription>Card Description</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p>{job.Application.length}</p>
-          </CardContent>
+          <CardContent>{/* <p>{job.Application.length}</p> */}</CardContent>
           <CardFooter>
             <p>Bewerber ansehen</p>
           </CardFooter>
@@ -80,9 +77,7 @@ const ViewJob = ({ params }: JobParams) => {
             <CardTitle>Statistiken</CardTitle>
             <CardDescription>So performt dein Job</CardDescription>
           </CardHeader>
-          <CardContent>
-            <p>{job.Application.length}</p>
-          </CardContent>
+          <CardContent>{/* <p>{job.Application.length}</p> */}</CardContent>
           <CardFooter>
             <p>Bewerber ansehen</p>
           </CardFooter>

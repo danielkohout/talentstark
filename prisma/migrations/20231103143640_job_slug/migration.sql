@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Job` ADD COLUMN `slug` VARCHAR(191) NULL;
