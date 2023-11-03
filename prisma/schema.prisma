@@ -61,18 +61,18 @@ model Company {
 }
 
 model User {
-  id            String     @id @default(cuid())
-  email         String?    @unique
+  id            String    @id @default(cuid())
+  email         String?   @unique
   emailVerified DateTime?
   firstName     String?
   lastName      String?
   accounts      Account[]
   sessions      Session[]
-  company       Company?   @relation(fields: [companyId], references: [id])
+  company       Company?  @relation(fields: [companyId], references: [id])
   companyId     String?
-  teams         UserTeam[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  teams         Team[] 
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Team {
@@ -85,21 +85,12 @@ model Team {
   contactLastName  String
   description      String
   jobs             Job[]
-  users            UserTeam[]
+  users            User[]
   Company          Company?      @relation(fields: [companyId], references: [id])
   companyId        String?
   applications     Application[]
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
-}
-
-model UserTeam {
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  teamId String
-  team   Team   @relation(fields: [teamId], references: [id])
-
-  @@id([userId, teamId])
 }
 
 model Job {

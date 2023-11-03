@@ -7,22 +7,41 @@ import { privateProcedure, router } from "../trpc";
 export const teamRouter = router({
   getTeams: privateProcedure.query(async ({ ctx }) => {
     const { user } = ctx;
-    return await prisma.team.findMany({
-      where: {
-        companyId: user?.companyId,
-      },
-    });
+    if (!user) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Kein Benutzer vorhanden",
+      });
+    }
+    try {
+      return await prisma.team.findMany({
+        where: {
+          users: {
+            some: {
+              id: user.id,
+            },
+          },
+        },
+      });
+    } catch (e) {
+      console.log("e", e);
+    }
   }),
+
   getTeam: privateProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const userTeam = await prisma.userTeam.findFirst({
+      const teamMember = await prisma.team.findFirst({
         where: {
-          teamId: input.id,
-          userId: ctx.userId,
+          id: input.id,
+          users: {
+            some: {
+              id: ctx.userId,
+            },
+          },
         },
       });
-      if (!userTeam) {
+      if (!teamMember) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Keine Berechtigung",
@@ -39,13 +58,14 @@ export const teamRouter = router({
       });
       return team;
     }),
+
   addTeam: privateProcedure
     .input(addTeamSchema)
     .mutation(async ({ input, ctx }) => {
       const { user } = ctx;
-      // console.log("input", input);
+      console.log("input", input);
       try {
-        const newTeam = await prisma.team.create({
+        return await prisma.team.create({
           data: {
             name: input.name,
             city: input.city,
@@ -59,15 +79,13 @@ export const teamRouter = router({
                 id: user?.companyId!,
               },
             },
+            users: {
+              connect: {
+                id: user?.id,
+              },
+            },
           },
         });
-        const newUserTeam = await prisma.userTeam.create({
-          data: {
-            userId: user?.id!,
-            teamId: newTeam.id,
-          },
-        });
-        return newUserTeam;
       } catch (err) {
         console.log("err", err);
       }
@@ -76,17 +94,23 @@ export const teamRouter = router({
   editTeam: privateProcedure
     .input(editTeamSchema)
     .mutation(async ({ input, ctx }) => {
-      const name = input.name;
       const { user } = ctx;
-      const userTeamRelation = await prisma.userTeam.findFirst({
+      // Zuerst überprüfen, ob der Benutzer im Team ist
+      const team = await prisma.team.findFirst({
         where: {
-          userId: user?.id!,
-          teamId: input.id,
+          id: input.id,
+          users: {
+            some: {
+              id: user?.id!,
+            },
+          },
         },
       });
-      if (!userTeamRelation) {
+      // Wenn der Benutzer nicht im Team ist, Fehler werfen
+      if (!team) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
+      // Wenn der Benutzer im Team ist, das Team aktualisieren
       await prisma.team.update({
         where: {
           id: input.id,
@@ -109,24 +133,35 @@ export const teamRouter = router({
   getTeamJobs: privateProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      const userTeam = await prisma.userTeam.findFirst({
-        where: {
-          userId: ctx.user?.id,
-          teamId: input.id,
-        },
-        include: {
-          team: true,
-        },
-      });
-      if (!userTeam) {
+      // Stellen Sie sicher, dass ein Benutzer im Kontext vorhanden ist.
+      if (!ctx.user?.id) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
+
+      // Überprüfen Sie, ob der Benutzer Teil des Teams ist.
+      const team = await prisma.team.findFirst({
+        where: {
+          id: input.id,
+          users: {
+            some: {
+              id: ctx.user.id,
+            },
+          },
+        },
+      });
+
+      // Wenn das Team nicht gefunden wurde, hat der Benutzer keinen Zugriff.
+      if (!team) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      // Wenn das Team vorhanden ist, holen Sie die Jobs für dieses Team.
       const jobs = await prisma.job.findMany({
         where: {
-          teamId: userTeam.team.id,
+          teamId: team.id,
         },
         include: {
-          Application: true,
+          Application: true, // Stellen Sie sicher, dass dies der richtige Name der Relation ist
         },
       });
 

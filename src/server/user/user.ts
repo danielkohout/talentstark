@@ -18,11 +18,7 @@ export const userRouter = router({
       },
       include: {
         company: true,
-        teams: {
-          include: {
-            team: true,
-          },
-        },
+        teams: true,
       },
     });
     return user;

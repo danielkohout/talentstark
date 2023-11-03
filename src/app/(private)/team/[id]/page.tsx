@@ -11,10 +11,13 @@ interface TeamProps {
 
 const page = async ({ params }: TeamProps) => {
   const user = await getUser();
-  const userTeamRelation = await prisma.userTeam.findFirst({
+  const userTeamRelation = await prisma.team.findFirst({
     where: {
-      userId: user?.id!,
-      teamId: params.id,
+      users: {
+        some: {
+          id: user?.id,
+        },
+      },
     },
   });
   if (!userTeamRelation) {

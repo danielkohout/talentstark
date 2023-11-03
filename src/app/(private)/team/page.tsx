@@ -5,11 +5,14 @@ import prisma from "@/lib/db/prisma";
 
 const page = async () => {
   const user = await getUser();
-  const userTeams = await prisma.userTeam.findMany({
+  const userTeams = await prisma.user.findUnique({
     where: {
-      userId: user!.id,
+      id: user?.id,
     },
-  });
+    include: {
+      teams: true,
+    },
+  }).teams;
   if (userTeams && userTeams.length <= 0) {
     return <TeamSetup />;
   }

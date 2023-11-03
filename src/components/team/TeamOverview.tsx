@@ -17,6 +17,7 @@ import {
 
 const TeamOverview = () => {
   const { data: user, isLoading } = trpc.userRouter.getUser.useQuery();
+  const { data: teams } = trpc.teamRouter.getTeams.useQuery();
   return (
     <>
       <div className="">
@@ -64,49 +65,39 @@ const TeamOverview = () => {
             </ul>
           </div>
           <div className="mt-10 md:col-span-8 md:mr-4">
-            <ul className="space-y-8">
-              {user?.teams
-                .sort(
-                  (a, b) =>
-                    new Date(b.team.updatedAt).getTime() -
-                    new Date(a.team.updatedAt).getTime()
-                )
-
-                .map((teamRelation) => (
-                  <li className="" key={teamRelation.team.id}>
-                    <Card className="">
-                      <CardHeader>
-                        <CardTitle>{teamRelation.team.name}</CardTitle>
-                        <CardDescription>
-                          Zuletzt aktualisiert:{" "}
-                          {format(
-                            new Date(teamRelation.team.updatedAt),
-                            "dd MMM yyy",
-                            {
-                              locale: de,
-                            }
-                          )}{" "}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent></CardContent>
-                      <CardFooter className="flex justify-between">
-                        <Button variant="outline">
-                          Löschen
-                          <Trash className="ml-2 h-4 w-4" />
-                        </Button>
-                        <Link
-                          href={`/team/${teamRelation.teamId}`}
-                          className={buttonVariants({
-                            variant: "default",
-                          })}
-                        >
-                          Team ansehen
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  </li>
-                ))}
+            <ul className="space-y-8">              
+              {JSON.stringify(teams)}
+              {teams?.map((team) => (
+                <li className="" key={team.id}>
+                  <Card className="">
+                    <CardHeader>
+                      <CardTitle>{team.name}</CardTitle>
+                      <CardDescription>
+                        Zuletzt aktualisiert:{" "}
+                        {format(new Date(team.updatedAt), "dd MMM yyy", {
+                          locale: de,
+                        })}{" "}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent></CardContent>
+                    <CardFooter className="flex justify-between">
+                      <Button variant="outline">
+                        Löschen
+                        <Trash className="ml-2 h-4 w-4" />
+                      </Button>
+                      <Link
+                        href={`/team/${team.id}`}
+                        className={buttonVariants({
+                          variant: "default",
+                        })}
+                      >
+                        Team ansehen
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

@@ -48,6 +48,7 @@ const ViewJob = ({ params }: JobParams) => {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-8 md:px-8">
           <h1 className="flex items-center gap-2 text-xl font-bold md:text-2xl">
             {job?.name}
+            {job.Team?.name}
           </h1>
           <Link
             href={`/${companyLink}`}
@@ -88,7 +89,7 @@ const ViewJob = ({ params }: JobParams) => {
         </Card>
       </div>
       <div className="mx-auto max-w-7xl px-6 py-8 md:px-8">
-        <Applications />
+        <Applications params={params} />
       </div>
     </div>
   );

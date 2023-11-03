@@ -17,7 +17,7 @@ const Dashboard = () => {
   const { data: user, isLoading: userLoading } =
     trpc.userRouter.getUser.useQuery();
   if (!userLoading && !user?.firstName) {
-    redirect("/user/setup");
+    redirect("/user");
   }
   const { data: jobs, isLoading: jobLoading } =
     trpc.jobRouter.getCompanyJobs.useQuery();
