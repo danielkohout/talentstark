@@ -42,7 +42,7 @@ const AddTeam = () => {
   const utils = trpc.useUtils();
   const { mutate: addTeam, isLoading } = trpc.teamRouter.addTeam.useMutation({
     onSuccess: () => {
-      utils.userRouter.getUser.invalidate();
+      utils.teamRouter.invalidate();
       form.reset();
     },
   });

@@ -22,9 +22,13 @@ export const teamRouter = router({
             },
           },
         },
+        include: {
+          jobs: true,
+        },
       });
     } catch (e) {
       console.log("e", e);
+      return;
     }
   }),
 
@@ -165,5 +169,20 @@ export const teamRouter = router({
       });
 
       return jobs;
+    }),
+
+  deleteTeam: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await prisma.team.delete({
+        where: {
+          id: input.id,
+          users: {
+            some: {
+              id: ctx.user?.id,
+            },
+          },
+        },
+      });
     }),
 });

@@ -14,10 +14,25 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const TeamOverview = () => {
-  const { data: user, isLoading } = trpc.userRouter.getUser.useQuery();
+  const utils = trpc.useUtils();
   const { data: teams } = trpc.teamRouter.getTeams.useQuery();
+  const { mutate: deleteTeam } = trpc.teamRouter.deleteTeam.useMutation({
+    onSuccess: () => {
+      utils.teamRouter.invalidate();
+    },
+  });
   return (
     <>
       <div className="">
@@ -65,8 +80,7 @@ const TeamOverview = () => {
             </ul>
           </div>
           <div className="mt-10 md:col-span-8 md:mr-4">
-            <ul className="space-y-8">              
-              {JSON.stringify(teams)}
+            <ul className="space-y-8">
               {teams?.map((team) => (
                 <li className="" key={team.id}>
                   <Card className="">
@@ -81,10 +95,51 @@ const TeamOverview = () => {
                     </CardHeader>
                     <CardContent></CardContent>
                     <CardFooter className="flex justify-between">
-                      <Button variant="outline">
-                        Löschen
-                        <Trash className="ml-2 h-4 w-4" />
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger>
+                          <Button variant="outline">
+                            Löschen
+                            <Trash className="ml-2 h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>{team.name} löschen?</DialogTitle>
+                            <DialogDescription>
+                              Zu diesem Team gehört aktuell:{" "}
+                              <b>{team.jobs.length}</b> Job. Du kannst das Team
+                              nur löschen, wenn du vorher den Job löschst.
+                              <ul>
+                                {team.jobs.map((job) => (
+                                  <li className="mt-2 font-bold">
+                                    <Link href={`/job/${job.id}`}>
+                                      {job.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </DialogDescription>
+                            <DialogFooter>
+                              {team.jobs.length <= 0 ? (
+                                <DialogClose>
+                                  <Button
+                                    onClick={() => {
+                                      deleteTeam({ id: team.id });
+                                    }}
+                                    variant={"destructive"}
+                                  >
+                                    Löschen
+                                  </Button>
+                                </DialogClose>
+                              ) : (
+                                <DialogClose>
+                                  <Button>Schließen</Button>
+                                </DialogClose>
+                              )}
+                            </DialogFooter>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
                       <Link
                         href={`/team/${team.id}`}
                         className={buttonVariants({
