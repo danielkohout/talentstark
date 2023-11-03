@@ -1,7 +1,7 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import { makeUrlFriendly } from "@/lib/urlFriendlyName";
-import { ArrowRight, Eye } from "lucide-react";
+import { ArrowRight, Eye, QrCode } from "lucide-react";
 import Link from "next/link";
 import AccessDenied from "../AccessDenied";
 import { buttonVariants } from "../ui/button";
@@ -79,7 +79,7 @@ const ViewJob = ({ params }: JobParams) => {
               href={qrcodeSrc}
               download={"File"}
             >
-              <img className="mr-2 h-5 w-5" src={qrcodeSrc} alt="QR Code" />
+              <QrCode className="mr-2 h-4 w-4" />
               Download
             </a>
           </div>
