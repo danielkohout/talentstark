@@ -1,7 +1,7 @@
 "use client";
 import { trpc } from "@/app/_trpc/client";
 import { makeUrlFriendly } from "@/lib/urlFriendlyName";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Eye } from "lucide-react";
 import Link from "next/link";
 import AccessDenied from "../AccessDenied";
 import { buttonVariants } from "../ui/button";
@@ -15,7 +15,8 @@ import {
 } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import Applications from "./Applications";
-
+import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 interface JobParams {
   params: {
     id: string;
@@ -26,6 +27,17 @@ const ViewJob = ({ params }: JobParams) => {
   const { data: job, isLoading } = trpc.jobRouter.getJob.useQuery({
     id: params.id,
   });
+  const [qrcodeSrc, setQrcodeSrc] = useState<string>("");
+  useEffect(() => {
+    const generateQrCode = async () => {
+      QRCode.toDataURL(
+        `https://app.talentstark.de/${
+          job?.Team?.slug ? job.Team?.slug : job?.Team?.id
+        }/${job?.slug ? job.slug : job?.id}`
+      ).then(setQrcodeSrc);
+    };
+    generateQrCode();
+  }, [job]);
 
   if (isLoading) {
     return (
@@ -47,17 +59,30 @@ const ViewJob = ({ params }: JobParams) => {
             {job?.name}
             {job.Team?.name}
           </h1>
-          <Link
-            href={`/${job.Team?.slug ? job.Team?.slug : job.Team?.id}/${
-              job.slug ? job.slug : job.id
-            }`}
-            className={buttonVariants({
-              variant: "outline",
-            })}
-          >
-            Job Seite
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              target="_blank"
+              href={`/${job.Team?.slug ? job.Team?.slug : job.Team?.id}/${
+                job.slug ? job.slug : job.id
+              }`}
+              className={buttonVariants({
+                variant: "ghost",
+              })}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Job Seite
+            </Link>
+            <a
+              className={buttonVariants({
+                variant: "ghost",
+              })}
+              href={qrcodeSrc}
+              download={"File"}
+            >
+              <img className="mr-2 h-5 w-5" src={qrcodeSrc} alt="QR Code" />
+              Download
+            </a>
+          </div>
         </div>
       </div>
       {/* Info */}
