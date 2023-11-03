@@ -58,7 +58,7 @@ const AddJob = () => {
   });
   async function onSubmit(data: z.infer<typeof addJobSchema>) {
     await addJob(data);
-    console.log(data);
+    // console.log(data);
   }
   return (
     <div className="ld:px-8 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-6">

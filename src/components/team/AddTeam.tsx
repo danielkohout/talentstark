@@ -65,13 +65,13 @@ const AddTeam = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          console.log("Fetched data:", data[0].name);
+          // console.log("Fetched data:", data[0].name);
           form.setValue("city", data[0].name);
         } else {
-          console.log("Failed to fetch data:", response.status);
+          // console.log("Failed to fetch data:", response.status);
         }
       } catch (error) {
-        console.log("An error occurred:", error);
+        // console.log("An error occurred:", error);
       }
     };
 

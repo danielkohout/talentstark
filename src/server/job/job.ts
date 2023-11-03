@@ -30,7 +30,7 @@ export const jobRouter = router({
         });
         return newJob;
       } catch (error) {
-        console.log("error", error);
+        // console.log("error", error);
         throw new TRPCError({ code: "BAD_REQUEST" });
       }
     }),
@@ -51,7 +51,7 @@ export const jobRouter = router({
           company: true,
         },
       });
-      console.log("userCompany", userCompany?.company);
+      // console.log("userCompany", userCompany?.company);
       const job = await prisma.job.findFirst({
         where: {
           id: input.id,

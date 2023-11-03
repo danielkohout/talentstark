@@ -27,7 +27,7 @@ export const teamRouter = router({
         },
       });
     } catch (e) {
-      console.log("e", e);
+      // console.log("e", e);
       return;
     }
   }),
@@ -90,7 +90,7 @@ export const teamRouter = router({
           },
         });
       } catch (err) {
-        console.log("err", err);
+        // console.log("err", err);
       }
     }),
 

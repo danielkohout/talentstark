@@ -58,7 +58,7 @@ const EditTeam = ({ id }: TeamProps) => {
       },
     });
 
-  console.log(form.watch());
+  // console.log(form.watch());
   useEffect(() => {
     const setInitalValues = async () => {
       form.setValue("id", team?.id as string);
@@ -82,13 +82,13 @@ const EditTeam = ({ id }: TeamProps) => {
         );
         if (response.ok) {
           const data = await response.json();
-          console.log("Fetched data:", data[0].name);
+          // console.log("Fetched data:", data[0].name);
           form.setValue("city", data[0].name);
         } else {
-          console.log("Failed to fetch data:", response.status);
+          // console.log("Failed to fetch data:", response.status);
         }
       } catch (error) {
-        console.log("An error occurred:", error);
+        // console.log("An error occurred:", error);
       }
     };
 

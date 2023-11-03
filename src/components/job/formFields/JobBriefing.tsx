@@ -39,7 +39,7 @@ const JobBriefing = ({ formStep, setFormStep, form }: JobFieldInterface) => {
   // console.log(form.watch());
 
   useEffect(() => {
-    console.log("Änderung");
+    // console.log("Änderung");
     form.setValue("briefing", completion);
   }, [completion]);
 
