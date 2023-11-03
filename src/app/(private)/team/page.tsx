@@ -10,5 +10,6 @@ const page = async () => {
   }
   return <TeamOverview />;
 };
+export const dynamic = "force-dynamic";
 
 export default page;
