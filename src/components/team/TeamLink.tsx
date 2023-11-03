@@ -54,20 +54,18 @@ const TeamLink = ({ params }: TeamLinkProps) => {
     <Dialog>
       <DialogTrigger
         className={buttonVariants({
-          variant: "default",
-          size: "sm",
-          className: "mt-2",
+          variant: "ghost",
         })}
       >
         <Link2 className="mr-2 h-4 w-4" />
-        Jetzt Link erstellen
+        Link anpassen
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Mach dein Team sichtbar!</DialogTitle>
           <DialogDescription>
             Vergib einen Link, so kannst du alle Jobs des Teams öffentlich
-            teilen.
+            teilen. Ein Link kann beispielsweise sein: cnc-dreherei-maier
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

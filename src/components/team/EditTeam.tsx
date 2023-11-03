@@ -102,7 +102,7 @@ const EditTeam = ({ id }: TeamProps) => {
     <Sheet>
       <SheetTrigger asChild>
         <div className="inline-block cursor-pointer px-2">
-          <Settings className="h-4 w-4" />
+          <Settings className="h-4 w-4 transition hover:rotate-90" />
         </div>
       </SheetTrigger>
       <SheetContent className="overflow-y-auto">
