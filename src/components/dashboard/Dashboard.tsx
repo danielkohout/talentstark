@@ -89,7 +89,7 @@ const Dashboard = () => {
               Aktive Jobs von deinem Unternehmen: {user?.company?.name}
             </h2>
             <div className="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-3">
-              {jobs.map((job) => (
+              {jobs.map((job: any) => (
                 <div key={job.id} className="">
                   <div className="divide-y divide-gray-200 rounded-lg border bg-white shadow-sm dark:bg-transparent">
                     <div className="p-6">
