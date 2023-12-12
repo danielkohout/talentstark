@@ -3,7 +3,7 @@ import { privateProcedure, publicProcedure, router } from "../trpc";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db/prisma";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { editUserSchema } from "@/lib/types/user";
 
 export const userRouter = router({

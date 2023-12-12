@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import prisma from "@/lib/db/prisma";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { getServerSession } from "next-auth";
