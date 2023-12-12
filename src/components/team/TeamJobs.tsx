@@ -27,7 +27,7 @@ const TeamJobs = ({ params }: TeamJobsProps) => {
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
       {jobs ? (
         <div>
-          {jobs.map((job) => (
+          {jobs.map((job: any) => (
             <Card key={job.id}>
               <CardHeader>
                 <CardTitle>{job.name}</CardTitle>
