@@ -90,7 +90,7 @@ const ViewAllJobs = () => {
             </div>
             <div className="mr-8 md:col-span-8">
               <ul className="space-y-8">
-                {jobs?.map((job) => (
+                {jobs?.map((job: any) => (
                   <li key={job.id}>
                     <Card>
                       <CardHeader>
