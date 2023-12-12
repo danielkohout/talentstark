@@ -33,7 +33,8 @@ const ViewJob = ({ params }: JobParams) => {
       QRCode.toDataURL(
         `https://app.talentstark.de/${
           job?.Team?.slug ? job.Team?.slug : job?.Team?.id
-        }/${job?.slug ? job.slug : job?.id}`
+        }/${job?.slug ? job.slug : job?.id}`,
+        { type: "image/png" }
       ).then(setQrcodeSrc);
     };
     generateQrCode();
